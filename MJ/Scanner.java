@@ -134,7 +134,8 @@ public class Scanner {
             if (t.val == null) {
                 t.val = String.valueOf((ch));
                 nextCh();
-            }else{
+            }
+            else {
                 t.val += ch;
                 nextCh();
             }
@@ -163,14 +164,18 @@ public class Scanner {
             if (t.val == null) {
                 t.val = String.valueOf(ch);
             }
-            else t.val += ch;
+            else {
+                t.val += ch;
+            }
             nextCh();
         }
         long temp =  Long.parseLong(t.val);
         if (temp > Integer.MAX_VALUE){
             System.out.println("Error: Integer Overflow.");
         }
-        else t.numVal = (int) temp;
+        else {
+            t.numVal = (int) temp;
+        }
         t.kind = number;
         nextCh();
     }
