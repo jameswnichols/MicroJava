@@ -215,12 +215,13 @@ public class Scanner {
                 System.out.printf("Found Error With Character: '%s'%n", CharacterString);
             }
 
-            // No Ending ' Was Found Or Character String Was Empty.
+        // No Ending ' Was Found Or Character String Was Empty.
         }else{
             System.out.printf("Found Error With Character: '%s'%n", CharacterString);
         }
 
         if (ch == '\''){
+
             // Read Next Character So Starts After Ending '.
             nextCh();
         }
