@@ -158,60 +158,6 @@ public class Scanner {
 
     private static void readCharCon(Token t){
 
-        // Read Next Character So Starts On The Character After '.
-        nextCh();
-
-        StringBuilder CharacterString = new StringBuilder();
-        while (ch != eol && ch != '\'') {
-            CharacterString.append(ch);
-            nextCh();
-        }
-
-        // As Per Spec, Set Token Kind To charCon Regardless of Errors.
-        t.kind = charCon;
-
-        if (ch == '\'' && (!CharacterString.isEmpty())){
-            // Successfully Found Start And End '.
-
-            //If The Character String Is 1 Character Long And Not A Backslash, e.g. 'A'.
-            if (CharacterString.length() == 1 && CharacterString.charAt(0) != '\\'){
-                t.val = CharacterString.toString();
-            }
-
-            // If The Character String Is 2 Characters Long e.g. '\t'.
-            else if(CharacterString.length() == 2 && CharacterString.charAt(0) == '\\'){
-                boolean ReadEscapeSequence = true;
-                switch(CharacterString.charAt(1)){
-                    case '\\': t.val = "\\"; break;
-                    case '\'': t.val = "'"; break;
-                    case '\"': t.val = "\""; break;
-                    case 't': t.val = "\t"; break;
-                    case 'b': t.val = "\b"; break;
-                    case 'n': t.val = "\n"; break;
-                    case 'r': t.val = "\r"; break;
-                    case 'f': t.val = "\f"; break;
-                    default: ReadEscapeSequence = false; break;
-                }
-
-                if (!ReadEscapeSequence){
-                    System.out.printf("Found Error With Character: '%s'%n", CharacterString);
-                }
-            }
-
-            // If The Character String Is Anything Else e.g. 'AA'.
-            else{
-                System.out.printf("Found Error With Character: '%s'%n", CharacterString);
-            }
-
-        // No Ending ' Was Found Or Character String Was Empty.
-        }else{
-            System.out.printf("Found Error With Character: '%s'%n", CharacterString);
-        }
-
-        if (ch == '\''){
-            // Read Next Character So Starts After Ending '.
-            nextCh();
-        }
     }
 
 }
