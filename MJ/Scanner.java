@@ -134,9 +134,10 @@ public class Scanner {
             if (t.val == null) {
                 t.val = String.valueOf((ch));
                 nextCh();
+            }else{
+                t.val += ch;
+                nextCh();
             }
-            t.val += ch;
-            nextCh();
         }
         int index = 0;
         boolean keyword_found = false;
@@ -159,7 +160,9 @@ public class Scanner {
             if (!Character.isDigit(ch)){
                 break;
             }
-            if (t.val == null) t.val = String.valueOf(ch);
+            if (t.val == null) {
+                t.val = String.valueOf(ch);
+            }
             else t.val += ch;
             nextCh();
         }
