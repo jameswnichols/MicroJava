@@ -159,6 +159,7 @@ public class Scanner {
             if (!Character.isDigit(ch)){
                 break;
             }
+            if (t.val == null) t.val = String.valueOf(ch);
             else t.val += ch;
             nextCh();
         }
