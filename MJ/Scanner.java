@@ -131,6 +131,10 @@ public class Scanner {
 
     private static void readName(Token t){
         while (Character.isLetterOrDigit(ch)) { // Loop through input, until a white space.
+            if (t.val == null) {
+                t.val = String.valueOf((ch));
+                nextCh();
+            }
             t.val += ch;
             nextCh();
         }
