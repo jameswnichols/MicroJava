@@ -107,7 +107,7 @@ public class Scanner {
     }
 
     private static void readName(Token t){
-        while (ch != eofCh) { // Loop through input, until a white space.
+        while (ch != eofCh && ch != eol) { // Loop through input, until a white space.
             t.val += ch;
             nextCh();
         }
