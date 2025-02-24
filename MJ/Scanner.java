@@ -119,9 +119,9 @@ public class Scanner {
             if (keyword.equals(t.val)) {
                 // as both lists are sorted we can use the index to get the code for the keyword
                 t.kind = keyVal[index];
+                keyword_found = true;
             }
             index++;
-            keyword_found = true;
         }
         if (!keyword_found) { // If the name isn't a keyword, set token kind to ident
             t.kind = ident;
