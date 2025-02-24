@@ -87,7 +87,7 @@ public class Scanner {
         if (Character.isLetter(ch)) {
             readName(t);
         }
-        switch (ch) {
+        else switch (ch) {
             case ';': nextCh(); t.kind = semicolon; break;
             case '.': nextCh(); t.kind = period; break;
             case eofCh: t.kind = eof; break;
@@ -126,12 +126,10 @@ public class Scanner {
     }
 
     private static void readName(Token t){
-        while (ch != eofCh && ch != eol) { // Loop through input, until a white space.
+        while (Character.isLetterOrDigit(ch)) { // Loop through input, until a white space.
             t.val += ch;
             nextCh();
         }
-        // ensure ch holds the first character after the name
-        nextCh();
         int index = 0;
         boolean keyword_found = false;
         for (String keyword : key) {
