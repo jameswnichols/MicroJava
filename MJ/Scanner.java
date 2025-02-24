@@ -84,14 +84,13 @@ public class Scanner {
     public static Token next() {
         while (ch <= ' ') nextCh(); // skip blanks, tabs, eols
         Token t = new Token(); t.line = line; t.col = col;
+        if (Character.isLetter(ch)) {
+            readName(t);
+        }
         switch (ch) {
-//            case 'a': case 'b': ... case 'z': case 'A': case 'B': ... case 'Z':
-//                readName(t); break;
-//            case '0': case '1': ... case '9':
-//                readNumber(t); break;
             case ';': nextCh(); t.kind = semicolon; break;
             case '.': nextCh(); t.kind = period; break;
-            case eofCh: t.kind = eof; break; // no nextCh() any more
+            case eofCh: t.kind = eof; break;
             case '=': nextCh();
                 if (ch == '=') { nextCh(); t.kind = eql; } else t.kind = assign;
                 break;
@@ -101,6 +100,26 @@ public class Scanner {
                     t = next(); // call scanner recursively
                 } else t.kind = slash;
                 break;
+            case '+': nextCh(); t.kind = plus; break;
+            case '-': nextCh(); t.kind = minus; break;
+            case '*': nextCh(); t.kind = times; break;
+            case '%': nextCh(); t.kind = rem; break;
+            case '!': nextCh();
+                if (ch == '=') {nextCh(); t.kind = neq; break;}
+                else {nextCh(); t.kind = none; break;}
+            case '<': nextCh();
+                if (ch == '=') {nextCh(); t.kind = leq; break;}
+                else {nextCh(); t.kind = lss; break;}
+            case '>': nextCh();
+                if (ch == '=') {nextCh(); t.kind = geq; break;}
+                else {nextCh(); t.kind = gtr; break;}
+            case ',': nextCh(); t.kind = comma; break;
+            case '(': nextCh(); t.kind = lpar; break;
+            case ')': nextCh(); t.kind = rpar; break;
+            case '[': nextCh(); t.kind = lbrack; break;
+            case ']': nextCh(); t.kind = rbrack; break;
+            case '{': nextCh(); t.kind = lbrace; break;
+            case '}': nextCh(); t.kind = rbrace; break;
             default: nextCh(); t.kind = none; break;
         }
         return t;
