@@ -153,7 +153,6 @@ public class Scanner {
     private static void readNumber(Token t){
         while (ch != eofCh && ch != eol) { // Loop through input, until a white space.
             if (!Character.isDigit(ch)){
-                System.out.print("Error: Invalid digit.");
                 break;
             }
             else t.val += ch;
@@ -161,7 +160,7 @@ public class Scanner {
         }
         long temp =  Long.parseLong(t.val);
         if (temp > Integer.MAX_VALUE){
-            System.out.print("Error: Integer Overflow.");
+            System.out.println("Error: Integer Overflow.");
         }
         else t.numVal = (int) temp;
         t.kind = number;
