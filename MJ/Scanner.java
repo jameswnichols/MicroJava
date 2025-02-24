@@ -82,7 +82,40 @@ public class Scanner {
 
     //---------- Return next input token
     public static Token next() {
-        TODO // add your code here
+        while (ch <= ' ') nextCh(); // skip blanks, tabs, eols
+        Token t = new Token(); t.line = line; t.col = col;
+        switch (ch) {
+//            case 'a': case 'b': ... case 'z': case 'A': case 'B': ... case 'Z':
+//                readName(t); break;
+//            case '0': case '1': ... case '9':
+//                readNumber(t); break;
+            case ';': nextCh(); t.kind = semicolon; break;
+            case '.': nextCh(); t.kind = period; break;
+            case eofCh: t.kind = eof; break; // no nextCh() any more
+            case '=': nextCh();
+                if (ch == '=') { nextCh(); t.kind = eql; } else t.kind = assign;
+                break;
+            case '/': nextCh();
+                if (ch == '/') {
+                    do nextCh(); while (ch != '\n' && ch != eofCh);
+                    t = next(); // call scanner recursively
+                } else t.kind = slash;
+                break;
+            default: nextCh(); t.kind = none; break;
+        }
+        return t;
+    }
+
+    private static void readName(Token t){
+
+    }
+
+    private static void readNumber(Token t){
+
+    }
+
+    private static void readCharCon(Token t){
+
     }
 
 }
