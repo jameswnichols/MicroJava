@@ -194,21 +194,19 @@ public class Scanner {
 
             //If The Character String Is 1 Character Long And Not A Backslash, e.g. 'A'.
             if (CharacterString.length() == 1 && CharacterString.charAt(0) != '\\'){
-                t.val = CharacterString.toString();
+                t.numVal = CharacterString.charAt(0);
             }
 
             // If The Character String Is 2 Characters Long e.g. '\t'.
             else if(CharacterString.length() == 2 && CharacterString.charAt(0) == '\\'){
                 boolean ReadEscapeSequence = true;
                 switch(CharacterString.charAt(1)){
-                    case '\\': t.val = "\\"; break;
-                    case '\'': t.val = "'"; break;
-                    case '\"': t.val = "\""; break;
-                    case 't': t.val = "\t"; break;
-                    case 'b': t.val = "\b"; break;
-                    case 'n': t.val = "\n"; break;
-                    case 'r': t.val = "\r"; break;
-                    case 'f': t.val = "\f"; break;
+                    case '\\': t.numVal = '\\'; break;
+                    case '\'': t.numVal = '\''; break;
+                    case '\"': t.numVal = '\"'; break;
+                    case 't': t.numVal = '\t'; break;
+                    case 'n': t.numVal = '\n'; break;
+                    case 'r': t.numVal = '\r'; break;
                     default: ReadEscapeSequence = false; break;
                 }
 
