@@ -87,6 +87,9 @@ public class Scanner {
         if (Character.isLetter(ch)) {
             readName(t);
         }
+        else if (Character.isDigit(ch)){
+            readNumber(t);
+        }
         else switch (ch) {
             case ';': nextCh(); t.kind = semicolon; break;
             case '.': nextCh(); t.kind = period; break;
