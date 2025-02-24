@@ -107,6 +107,25 @@ public class Scanner {
     }
 
     private static void readName(Token t){
+        while (ch != eofCh) { // Loop through input, until a white space.
+            t.val += ch;
+            nextCh();
+        }
+        // ensure ch holds the first character after the name
+        nextCh();
+        int index = 0;
+        boolean keyword_found = false;
+        for (String keyword : key) {
+            if (keyword.equals(t.val)) {
+                // as both lists are sorted we can use the index to get the code for the keyword
+                t.kind = keyVal[index];
+            }
+            index++;
+            keyword_found = true;
+        }
+        if (!keyword_found) { // If the name isn't a keyword, set token kind to ident
+            t.kind = ident;
+        }
 
     }
 
