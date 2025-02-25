@@ -306,7 +306,7 @@ public class Parser {
     // Relop = "==" | "!=" | ">" | ">=" | "<" | "<=".
     private static void Relop(){
         if (relop.get(sym)) {scan();}
-        else error("Invalid input.");
+        else error("Invalid Comparison.");
     }
 
     // Expr = ["-"] Term {Addop Term}.
@@ -360,7 +360,7 @@ public class Parser {
                 check(rpar);
             }
         } else {
-            error("Invalid Factor.");
+            error("Invalid Expression.");
         }
     }
 
