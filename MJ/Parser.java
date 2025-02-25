@@ -94,31 +94,37 @@ public class Parser {
 
     // Program = "program" ident {ConstDecl | ClassDecl | VarDecl} '{' {MethodDecl} '}'.
     private static void Program() {
-        if (sym == program_) {
-            scan();
-            check(ident);
-            while (sym == final_ || sym == ident || sym == class_) {
-                if (sym == final_) {
-                    ConstDecl();
-                }
-                if (sym == ident) {
-                    VarDecl();
-                }
-                if (sym == class_) {
-                    ClassDecl();
-                }
+        check(program_);
+        check(ident);
+        while (true) {
+            if (sym == final_) {
+                ConstDecl();
             }
-            check(lbrace);
-            while (sym == ident || sym == void_) {
-                MethodDecl();
+            else if (sym == ident) {
+                VarDecl();
             }
-            check(rbrace);
+            else if (sym == class_) {
+                ClassDecl();
+            }
+            else {break;}
         }
+        check(lbrace);
+        while (sym == ident || sym == void_) {
+            MethodDecl();
+        }
+        check(rbrace);
     }
 
     // ConstDecl = "final" Type ident "=" (number | charConst) ";".
     private static void ConstDecl(){
-
+        check(final_);
+        Type();
+        check(ident);
+        check(eql);
+        if (sym == number) {scan();}
+        else if (sym == charCon) {scan();}
+        else {error("Invalid Constant Declaration");}
+        check(semicolon);
     }
 
     // VarDecl = Type ident {"," ident } ";".
