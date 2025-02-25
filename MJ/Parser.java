@@ -313,7 +313,7 @@ public class Parser {
         if (sym == plus || sym == minus){
             scan();
         }else{
-            error("Invalid Addop.");
+            error("Invalid + or - Operation.");
         }
     }
 
@@ -322,7 +322,7 @@ public class Parser {
         if (sym == times || sym == slash || sym == rem){
             scan();
         }else{
-            error("Invalid Mulop.");
+            error("Invalid * or / or % Operation.");
         }
     }
 
