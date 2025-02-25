@@ -124,7 +124,9 @@ public class Parser {
         check(assign);
         if (sym == number) {scan();}
         else if (sym == charCon) {scan();}
-        else {error("Invalid Constant Declaration");}
+        else {
+            error("Invalid Constant Declaration");
+        }
         check(semicolon);
     }
 
@@ -270,7 +272,7 @@ public class Parser {
             }
         }
         else {
-            error("Invalid Statement Declaration");
+            error("Invalid Statement Declaration.");
         }
     }
 
