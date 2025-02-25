@@ -259,7 +259,6 @@ public class Parser {
     //
     private static void Factor(){
         if (FactorSet.get(sym)){
-            scan();
             if (sym == ident){
                 Designator();
                 if (sym == lpar){
