@@ -144,9 +144,14 @@ public class Parser {
         }
         check(semicolon);
     }
+
     // ClassDecl = "class" ident "{" {VarDecl} "}".
     private static void ClassDecl(){
-
+        check(class_);
+        check(ident);
+        check(lbrace);
+        while (sym == ident) {VarDecl();}
+        check(rbrace);
     }
 
     // MethodDecl = (Type | "void") ident "(" [FormPars] ")" {VarDecl} Block.
