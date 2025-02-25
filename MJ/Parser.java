@@ -59,7 +59,7 @@ public class Parser {
     public  static int errors;  	// error counter
     private static int errDist;		// no. of correctly recognized tokens since last error
 
-    private static Obj curMethod;	// currently compiled method
+    // private static Obj curMethod;	// currently compiled method
 
     //----------- terminal first/sync sets; initialized in method parse() -----
     private static BitSet firstExpr, firstStat, syncStat, syncDecl;
