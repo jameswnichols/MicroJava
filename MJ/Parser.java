@@ -129,15 +129,12 @@ public class Parser {
 
     // VarDecl = Type ident {"," ident } ";".
     private static void VarDecl() {
-        if (sym == ident) {
-            Type();
-        }
+        Type();
         check(ident);
         while (true) {
             if (sym == comma) {
                 scan();
-            } else if (sym == ident) {
-                scan();
+                check(ident);
             } else {
                 break;
             }
@@ -156,14 +153,12 @@ public class Parser {
 
     // MethodDecl = (Type | "void") ident "(" [FormPars] ")" {VarDecl} Block.
     private static void MethodDecl(){
-        while (true) {
-            if (sym == ident) {
-                Type();
-            } else if (sym == void_) {
-                scan();
-            } else {
-                break;
-            }
+        if (sym == ident) {
+            Type();
+        } else if (sym == void_) {
+            scan();
+        } else {
+            error("Invalid Method Declaration.");
         }
         check(ident);
         check(lbrack);
@@ -174,9 +169,7 @@ public class Parser {
         while (sym == ident) {
             VarDecl();
         }
-        if (sym == lbrace) {
-            Block();
-        }
+        Block();
     }
 
     // FormPars = Type ident {"," Type ident}.
