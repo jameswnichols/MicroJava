@@ -156,7 +156,27 @@ public class Parser {
 
     // MethodDecl = (Type | "void") ident "(" [FormPars] ")" {VarDecl} Block.
     private static void MethodDecl(){
-
+        while (true) {
+            if (sym == ident) {
+                Type();
+            } else if (sym == void_) {
+                scan();
+            } else {
+                break;
+            }
+        }
+        check(ident);
+        check(lbrack);
+        if (sym == ident) {
+            FormPars();
+        }
+        check(rbrack);
+        while (sym == ident) {
+            VarDecl();
+        }
+        if (sym == lbrace) {
+            Block();
+        }
     }
 
     // FormPars = Type ident {"," Type ident}.
