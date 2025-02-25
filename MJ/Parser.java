@@ -212,14 +212,21 @@ public class Parser {
     // ActPars = "(" [ Expr {"," Expr} ] ")".
     private static void ActPars(){
         check(lpar);
-
+        if (sym == minus || FactorSet.get(sym)) {
+            Expr();
+            while (sym == comma) {
+                scan();
+                Expr();
+            }
+        }
+        check(rpar);
     }
 
     // Condition = Expr Relop Expr.
     private static void Condition(){
-        if (sym == minus || FactorSet.get(sym)) {
-            scan();
-        }
+        Expr();
+        Relop();
+        Expr();
     }
 
     // Relop = "==" | "!=" | ">" | ">=" | "<" | "<=".
