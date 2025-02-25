@@ -181,7 +181,13 @@ public class Parser {
 
     // FormPars = Type ident {"," Type ident}.
     private static void FormPars(){
-
+        Type();
+        check(ident);
+        while (sym == comma) {
+            scan();
+            Type();
+            check(ident);
+        }
     }
 
     // Type = ident ["[" "]"].
