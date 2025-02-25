@@ -97,7 +97,90 @@ public class Parser {
         TODO  // add parsing actions
     }
 
-    TODO  // add parsing methods for all productions
+    // ConstDecl = "final" Type ident "=" (number | charConst) ";".
+    private static void ConstDecl(){
+
+    }
+
+    // VarDecl = Type ident {"," ident } ";".
+    private static void VarDecl(){
+
+    }
+
+    // ClassDecl = "class" ident "{" {VarDecl} "}".
+    private static void ClassDecl(){
+
+    }
+
+    // MethodDecl = (Type | "void") ident "(" [FormPars] ")" {VarDecl} Block.
+    private static void MethodDecl(){
+
+    }
+
+    // FormPars = Type ident {"," Type ident}.
+    private static void FormPars(){
+
+    }
+
+    // Type = ident ["[" "]"].
+    private static void Type(){
+
+    }
+
+    // Block = "{" {Statement} "}".
+    private static void Block(){
+
+    }
+
+    //
+    private static void Statement(){
+
+    }
+
+    // ActPars = "(" [ Expr {"," Expr} ] ")".
+    private static void ActPars(){
+
+    }
+
+    // Condition = Expr Relop Expr.
+    private static void Condition(){
+
+    }
+
+    // Relop = "==" | "!=" | ">" | ">=" | "<" | "<=".
+    private static void Relop(){
+
+    }
+
+    // Expr = ["-"] Term {Addop Term}.
+    private static void Expr(){
+
+    }
+
+    // Term = Factor {Mulop Factor}.
+    private static void Term(){
+
+    }
+
+    //
+    private static void Factor(){
+
+    }
+
+    // Designator = ident {"." ident | "[" Expr "]"}.
+    private static void Designator(){
+
+    }
+
+    // Addop = "+" | "-".
+    private static void Addop(){
+
+    }
+
+    // Mulop = "*" | "/" | "%".
+    private static void Mulop(){
+
+    }
 
     public static void parse() {
         BitSet s;
