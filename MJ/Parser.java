@@ -109,7 +109,7 @@ public class Parser {
             }
             else if (sym == lbrace || sym == eof) {break;}
             else {
-                error("invalid start of statement");
+                error("Invalid Start of Statement");
                 while (!syncDecl.get(sym)) scan();
                 errDist = 0;
             }
@@ -212,7 +212,7 @@ public class Parser {
     //
     private static void Statement(){
         if (!firstStat.get(sym)) {
-            error("invalid start of statement");
+            error("Invalid Start of Statement");
             while (!syncStat.get(sym)) scan();
             errDist = 0;
         }
