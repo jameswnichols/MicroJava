@@ -3,6 +3,7 @@
 */
 package MJ;
 
+import javax.swing.plaf.nimbus.State;
 import java.util.*;
 //import MJ.SymTab.*;
 //import MJ.CodeGen.*;
@@ -199,7 +200,74 @@ public class Parser {
 
     //
     private static void Statement(){
-
+        if (firstStat.get(sym)) {
+            if (sym == ident) {
+                Designator();
+                if (sym == eql) {
+                    scan();
+                    Expr();
+                }
+                else if (sym == lpar) {
+                    ActPars();
+                }
+                else {
+                    error("Invalid Statement Declaration");
+                }
+                check(semicolon);
+            }
+        }
+        else if (sym == if_) {
+            scan();
+            check(lpar);
+            Condition();
+            check(rpar);
+            Statement();
+            if (sym == else_) {
+                scan();
+                Statement();
+            }
+        }
+        else if (sym == while_) {
+            scan();
+            check(lpar);
+            Condition();
+            check(rpar);
+            Statement();
+        }
+        else if (sym == return_) {
+            scan();
+            if (sym == minus || sym == ident) {
+                Expr();
+            }
+            check(semicolon);
+        }
+        else if (sym == read_) {
+            scan();
+            check(lpar);
+            Designator();
+            check(rpar);
+            check(semicolon);
+        }
+        else if (sym == print_) {
+            scan();
+            check(lpar);
+            Expr();
+            if (sym == comma) {
+                scan();
+                check(number);
+            }
+            check(rpar);
+            check(semicolon);
+        }
+        else if (sym == lbrace) {
+            Block();
+        }
+        else if (sym == semicolon) {
+            scan();
+        }
+        else {
+            error("Invalid Statement Declaration");
+        }
     }
 
     // ActPars = "(" [ Expr {"," Expr} ] ")".
