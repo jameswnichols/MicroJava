@@ -235,7 +235,11 @@ public class Parser {
 
     // Term = Factor {Mulop Factor}.
     private static void Term(){
-
+        Factor();
+        while (sym == times || sym == slash || sym == rem){
+            Mulop();
+            Factor();
+        }
     }
 
     //
