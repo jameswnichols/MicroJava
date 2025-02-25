@@ -121,7 +121,7 @@ public class Parser {
         check(final_);
         Type();
         check(ident);
-        check(eql);
+        check(assign);
         if (sym == number) {scan();}
         else if (sym == charCon) {scan();}
         else {error("Invalid Constant Declaration");}
@@ -207,7 +207,7 @@ public class Parser {
         if (firstStat.get(sym)) {
             if (sym == ident) {
                 Designator();
-                if (sym == eql) {
+                if (sym == assign) {
                     scan();
                     Expr();
                 }
