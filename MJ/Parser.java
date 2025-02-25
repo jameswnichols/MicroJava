@@ -4,8 +4,8 @@
 package MJ;
 
 import java.util.*;
-import MJ.SymTab.*;
-import MJ.CodeGen.*;
+//import MJ.SymTab.*;
+//import MJ.CodeGen.*;
 
 public class Parser {
     private static final int  // token codes
@@ -120,7 +120,7 @@ public class Parser {
         scan();
         Program();
         if (sym != eof) error("end of file found before end of program");
-        if (Code.mainPc < 0) error("program contains no 'main' method");
+//        if (Code.mainPc < 0) error("program contains no 'main' method");
         //Tab.dumpScope(Tab.curScope.locals);
     }
 
