@@ -62,7 +62,7 @@ public class Parser {
     // private static Obj curMethod;	// currently compiled method
 
     //----------- terminal first/sync sets; initialized in method parse() -----
-    private static BitSet firstExpr, firstStat, syncStat, syncDecl, relop;
+    private static BitSet firstExpr, firstStat, syncStat, syncDecl, relop, FactorSet;
 
     //------------------- auxiliary methods ----------------------
     private static void scan() {
@@ -207,6 +207,37 @@ public class Parser {
 
     //
     private static void Factor(){
+        if (FactorSet.get(sym)){
+            scan();
+            if (sym == ident){
+                Designator();
+                if (sym == lpar){
+                    ActPars();
+                }
+            }
+            else if (sym == number){
+                scan();
+            }
+            else if (sym == charCon){
+                scan();
+            }
+            else if (sym == new_){
+                scan();
+                check(ident);
+                if (sym == lbrack){
+                    scan();
+                    Expr();
+                    check(rbrack);
+                }
+            }
+            else if (sym == lpar){
+                scan();
+                Expr();
+                check(rpar);
+            }
+        } else {
+            error("Invalid Factor.");
+        }
     }
 
     // Designator = ident {"." ident | "[" Expr "]"}.
@@ -262,6 +293,9 @@ public class Parser {
 
         s =  new BitSet(64); relop = s;
         relop.set(eql); relop.set(neq); relop.set(gtr); relop.set(geq); relop.set(lss); relop.set(leq);
+
+        s = new BitSet(64); FactorSet = s;
+        FactorSet.set(ident); FactorSet.set(number); FactorSet.set(charCon); FactorSet.set(new_); FactorSet.set(lpar);
 
         // start parsing
         errors = 0; errDist = 3;
