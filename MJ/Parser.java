@@ -62,7 +62,7 @@ public class Parser {
     // private static Obj curMethod;	// currently compiled method
 
     //----------- terminal first/sync sets; initialized in method parse() -----
-    private static BitSet firstExpr, firstStat, syncStat, syncDecl;
+    private static BitSet firstExpr, firstStat, syncStat, syncDecl, ;
 
     //------------------- auxiliary methods ----------------------
     private static void scan() {
@@ -94,7 +94,26 @@ public class Parser {
 
     // Program = "program" ident {ConstDecl | ClassDecl | VarDecl} '{' {MethodDecl} '}'.
     private static void Program() {
-        TODO  // add parsing actions
+        if (sym == program_) {
+            scan();
+            check(ident);
+            while (sym == final_ || sym == ident || sym == class_) {
+                if (sym == final_) {
+                    ConstDecl();
+                }
+                if (sym == ident) {
+                    VarDecl();
+                }
+                if (sym == class_) {
+                    ClassDecl();
+                }
+            }
+            check(lbrace);
+            while (sym == ident || sym == void_) {
+                MethodDecl();
+            }
+            check(rbrace);
+        }
     }
 
     // ConstDecl = "final" Type ident "=" (number | charConst) ";".
