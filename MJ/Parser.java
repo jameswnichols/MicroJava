@@ -62,7 +62,7 @@ public class Parser {
     // private static Obj curMethod;	// currently compiled method
 
     //----------- terminal first/sync sets; initialized in method parse() -----
-    private static BitSet firstExpr, firstStat, syncStat, syncDecl, ;
+    private static BitSet firstExpr, firstStat, syncStat, syncDecl, relop;
 
     //------------------- auxiliary methods ----------------------
     private static void scan() {
@@ -149,6 +149,7 @@ public class Parser {
 
     // Type = ident ["[" "]"].
     private static void Type(){
+        check(ident);
 
     }
 
@@ -164,17 +165,17 @@ public class Parser {
 
     // ActPars = "(" [ Expr {"," Expr} ] ")".
     private static void ActPars(){
-
+        check(lpar);
     }
 
     // Condition = Expr Relop Expr.
     private static void Condition(){
-
+        while ()
     }
 
     // Relop = "==" | "!=" | ">" | ">=" | "<" | "<=".
     private static void Relop(){
-
+        if (relop.get(sym)) {scan();}
     }
 
     // Expr = ["-"] Term {Addop Term}.
@@ -222,6 +223,9 @@ public class Parser {
 
         s = new BitSet(64); syncDecl = s;
         s.set(final_); s.set(ident); s.set(class_); s.set(lbrace); s.set(void_); s.set(eof);
+
+        s =  new BitSet(64); relop = s;
+        relop.set(eql); relop.set(neq); relop.set(gtr); relop.set(geq); relop.set(lss); relop.set(leq);
 
         // start parsing
         errors = 0; errDist = 3;
