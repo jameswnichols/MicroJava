@@ -190,22 +190,41 @@ public class Parser {
 
     //
     private static void Factor(){
-
     }
 
     // Designator = ident {"." ident | "[" Expr "]"}.
     private static void Designator(){
-
+        check(ident);
+        while (true){
+            if (sym == period) {
+                scan();
+                check(ident);
+            }else if (sym == lbrack) {
+                scan();
+                Expr();
+                check(rbrack);
+            } else{
+                break;
+            }
+        }
     }
 
     // Addop = "+" | "-".
     private static void Addop(){
-
+        if (sym == plus || sym == minus){
+            scan();
+        }else{
+            error("Invalid Addop.");
+        }
     }
 
     // Mulop = "*" | "/" | "%".
     private static void Mulop(){
-
+        if (sym == times || sym == slash || sym == rem){
+            scan();
+        }else{
+            error("Invalid Mulop.");
+        }
     }
 
     public static void parse() {
