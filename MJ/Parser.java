@@ -161,11 +161,11 @@ public class Parser {
             error("Invalid Method Declaration.");
         }
         check(ident);
-        check(lbrack);
+        check(lpar);
         if (sym == ident) {
             FormPars();
         }
-        check(rbrack);
+        check(rpar);
         while (sym == ident) {
             VarDecl();
         }
