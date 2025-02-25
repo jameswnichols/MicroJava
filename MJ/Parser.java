@@ -107,7 +107,12 @@ public class Parser {
             else if (sym == class_) {
                 ClassDecl();
             }
-            else {break;}
+            else if (sym == lbrace || sym == eof) {break;}
+            else {
+                error("invalid start of statement");
+                while (!syncDecl.get(sym)) scan();
+                errDist = 0;
+            }
         }
         check(lbrace);
         while (sym == ident || sym == void_) {
@@ -198,7 +203,7 @@ public class Parser {
     // Block = "{" {Statement} "}".
     private static void Block(){
         check(lbrace);
-        while (firstStat.get(sym)) {
+        while (sym != rbrace && sym != eof) {
             Statement();
         }
         check(rbrace);
@@ -206,75 +211,77 @@ public class Parser {
 
     //
     private static void Statement(){
-        if (firstStat.get(sym)) {
-            if (sym == ident) {
-                Designator();
-                if (sym == assign) {
-                    scan();
-                    Expr();
-                }
-                else if (sym == lpar) {
-                    ActPars();
-                }
-                else {
-                    error("Invalid Statement Declaration");
-                }
-                check(semicolon);
-            }
-            else if (sym == if_) {
+        if (!firstStat.get(sym)) {
+            error("invalid start of statement");
+            while (!syncStat.get(sym)) scan();
+            errDist = 0;
+        }
+        // Designator ("=" Expr | ActPars) ";"
+        if (sym == ident) {
+            Designator();
+
+            if (sym == assign) {
                 scan();
-                check(lpar);
-                Condition();
-                check(rpar);
-                Statement();
-                if (sym == else_) {
-                    scan();
-                    Statement();
-                }
-            }
-            else if (sym == while_) {
-                scan();
-                check(lpar);
-                Condition();
-                check(rpar);
-                Statement();
-            }
-            else if (sym == return_) {
-                scan();
-                if (sym == minus || sym == ident) {
-                    Expr();
-                }
-                check(semicolon);
-            }
-            else if (sym == read_) {
-                scan();
-                check(lpar);
-                Designator();
-                check(rpar);
-                check(semicolon);
-            }
-            else if (sym == print_) {
-                scan();
-                check(lpar);
                 Expr();
-                if (sym == comma) {
-                    scan();
-                    check(number);
-                }
-                check(rpar);
-                check(semicolon);
             }
-            else if (sym == lbrace) {
-                Block();
+            else if (sym == lpar) {
+                ActPars();
             }
-            else if (sym == semicolon) {
+            else {error("Invalid Assignment or Call.");}
+
+            check(semicolon);
+        }
+        else if (sym == if_) {
+            scan();
+            check(lpar);
+            Condition();
+            check(rpar);
+            Statement();
+            if (sym == else_) {
                 scan();
+                Statement();
             }
         }
-        else {
-            error("Invalid Statement Declaration.");
+        else if (sym == while_) {
+            scan();
+            check(lpar);
+            Condition();
+            check(rpar);
+            Statement();
+        }
+        else if (sym == return_) {
+            scan();
+            if (sym == minus || sym == ident) {
+                Expr();
+            }
+            check(semicolon);
+        }
+        else if (sym == read_) {
+            scan();
+            check(lpar);
+            Designator();
+            check(rpar);
+            check(semicolon);
+        }
+        else if (sym == print_) {
+            scan();
+            check(lpar);
+            Expr();
+            if (sym == comma) {
+                scan();
+                check(number);
+            }
+            check(rpar);
+            check(semicolon);
+        }
+        else if (sym == lbrace) {
+            Block();
+        }
+        else if (sym == semicolon) {
+            scan();
         }
     }
+
 
     // ActPars = "(" [ Expr {"," Expr} ] ")".
     private static void ActPars(){
@@ -406,7 +413,7 @@ public class Parser {
         s.clear(ident); s.set(rbrace); s.set(eof);
 
         s = new BitSet(64); syncDecl = s;
-        s.set(final_); s.set(ident); s.set(class_); s.set(lbrace); s.set(void_); s.set(eof);
+        s.set(final_); s.set(class_); s.set(lbrace); s.set(void_); s.set(eof);
 
         s =  new BitSet(64); relop = s;
         relop.set(eql); relop.set(neq); relop.set(gtr); relop.set(geq); relop.set(lss); relop.set(leq);
