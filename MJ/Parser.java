@@ -195,7 +195,11 @@ public class Parser {
 
     // Block = "{" {Statement} "}".
     private static void Block(){
-
+        check(lbrace);
+        while (firstStat.get(sym)) {
+            Statement();
+        }
+        check(rbrace);
     }
 
     //
