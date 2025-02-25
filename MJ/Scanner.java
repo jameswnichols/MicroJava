@@ -159,7 +159,15 @@ public class Scanner {
     private static void readNumber(Token t){
         while (ch != eofCh && ch != eol) { // Loop through input, until a white space.
             if (!Character.isDigit(ch)){
-                break;
+                long temp =  Long.parseLong(t.val);
+                if (temp > Integer.MAX_VALUE){
+                    System.out.println("Error: Integer Overflow.");
+                }
+                else {
+                    t.numVal = (int) temp;
+                }
+                t.kind = number;
+                return;
             }
             if (t.val == null) {
                 t.val = String.valueOf(ch);
@@ -169,15 +177,6 @@ public class Scanner {
             }
             nextCh();
         }
-        long temp =  Long.parseLong(t.val);
-        if (temp > Integer.MAX_VALUE){
-            System.out.println("Error: Integer Overflow.");
-        }
-        else {
-            t.numVal = (int) temp;
-        }
-        t.kind = number;
-        nextCh();
     }
 
     private static void readCharCon(Token t){
