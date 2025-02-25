@@ -167,7 +167,10 @@ public class Parser {
     // Type = ident ["[" "]"].
     private static void Type(){
         check(ident);
-
+        if (sym == lbrack) {
+            scan();
+            check(rbrack);
+        }
     }
 
     // Block = "{" {Statement} "}".
@@ -183,16 +186,20 @@ public class Parser {
     // ActPars = "(" [ Expr {"," Expr} ] ")".
     private static void ActPars(){
         check(lpar);
+
     }
 
     // Condition = Expr Relop Expr.
     private static void Condition(){
-        while ()
+        if (sym == minus || FactorSet.get(sym)) {
+            scan();
+        }
     }
 
     // Relop = "==" | "!=" | ">" | ">=" | "<" | "<=".
     private static void Relop(){
         if (relop.get(sym)) {scan();}
+        else error("Invalid input.");
     }
 
     // Expr = ["-"] Term {Addop Term}.
