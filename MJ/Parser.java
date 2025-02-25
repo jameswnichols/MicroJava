@@ -128,10 +128,22 @@ public class Parser {
     }
 
     // VarDecl = Type ident {"," ident } ";".
-    private static void VarDecl(){
-
+    private static void VarDecl() {
+        if (sym == ident) {
+            Type();
+        }
+        check(ident);
+        while (true) {
+            if (sym == comma) {
+                scan();
+            } else if (sym == ident) {
+                scan();
+            } else {
+                break;
+            }
+        }
+        check(semicolon);
     }
-
     // ClassDecl = "class" ident "{" {VarDecl} "}".
     private static void ClassDecl(){
 
