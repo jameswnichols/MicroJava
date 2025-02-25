@@ -230,7 +230,14 @@ public class Parser {
 
     // Expr = ["-"] Term {Addop Term}.
     private static void Expr(){
-
+        if (sym == minus){
+            scan();
+        }
+        Term();
+        while (sym == plus || sym == minus){
+            Addop();
+            Term();
+        }
     }
 
     // Term = Factor {Mulop Factor}.
