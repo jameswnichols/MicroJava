@@ -219,55 +219,55 @@ public class Parser {
                 }
                 check(semicolon);
             }
-        }
-        else if (sym == if_) {
-            scan();
-            check(lpar);
-            Condition();
-            check(rpar);
-            Statement();
-            if (sym == else_) {
+            else if (sym == if_) {
                 scan();
+                check(lpar);
+                Condition();
+                check(rpar);
+                Statement();
+                if (sym == else_) {
+                    scan();
+                    Statement();
+                }
+            }
+            else if (sym == while_) {
+                scan();
+                check(lpar);
+                Condition();
+                check(rpar);
                 Statement();
             }
-        }
-        else if (sym == while_) {
-            scan();
-            check(lpar);
-            Condition();
-            check(rpar);
-            Statement();
-        }
-        else if (sym == return_) {
-            scan();
-            if (sym == minus || sym == ident) {
-                Expr();
-            }
-            check(semicolon);
-        }
-        else if (sym == read_) {
-            scan();
-            check(lpar);
-            Designator();
-            check(rpar);
-            check(semicolon);
-        }
-        else if (sym == print_) {
-            scan();
-            check(lpar);
-            Expr();
-            if (sym == comma) {
+            else if (sym == return_) {
                 scan();
-                check(number);
+                if (sym == minus || sym == ident) {
+                    Expr();
+                }
+                check(semicolon);
             }
-            check(rpar);
-            check(semicolon);
-        }
-        else if (sym == lbrace) {
-            Block();
-        }
-        else if (sym == semicolon) {
-            scan();
+            else if (sym == read_) {
+                scan();
+                check(lpar);
+                Designator();
+                check(rpar);
+                check(semicolon);
+            }
+            else if (sym == print_) {
+                scan();
+                check(lpar);
+                Expr();
+                if (sym == comma) {
+                    scan();
+                    check(number);
+                }
+                check(rpar);
+                check(semicolon);
+            }
+            else if (sym == lbrace) {
+                Block();
+            }
+            else if (sym == semicolon) {
+                scan();
+            }
         }
         else {
             error("Invalid Statement Declaration");
