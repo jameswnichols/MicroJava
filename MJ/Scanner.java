@@ -177,7 +177,6 @@ public class Scanner {
             t.numVal = (int) temp;
         }
         t.kind = number;
-        nextCh();
     }
 
     private static void readCharCon(Token t){
