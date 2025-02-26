@@ -30,8 +30,9 @@ public class Tab {
         TODO  // fill in the code
     }
 
-    public static void closeScope() {
-        TODO  // fill in the code
+    static void closeScope() {
+        curScope = curScope.outer;
+        curLevel--;
     }
 
     //------------- Object insertion and retrieval --------------
