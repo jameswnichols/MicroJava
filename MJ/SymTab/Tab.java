@@ -43,7 +43,18 @@ public class Tab {
     // Create a new object with the given kind, name and type
     // and insert it into the top scope.
     public static Obj insert(int kind, String name, Struct type) {
-        TODO  // fill in the code
+        Obj obj = new Obj(kind, name, type);
+        if (kind == Obj.Var) {
+            obj.adr = curScope.nVars; curScope.nVars++;
+            obj.level = curLevel;
+        }
+        Obj p = curScope.locals, last = null;
+        while (p != null) {
+            if (p.name.equals(name)) error(name + " Declared Twice");
+            last = p; p = p.next;
+        }
+        if (last == null) curScope.locals = obj; else last.next = obj;
+        return obj;
     }
 
     // Retrieve the object with the given name from the top scope
