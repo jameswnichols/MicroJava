@@ -64,13 +64,17 @@ public class Tab {
                 if (p.name.equals(name)) {return p;}
             }
         }
-        error(name + " is undeclared");
+        error(name + " Is Undeclared");
         return noObj;
     }
 
     // Retrieve a class field with the given name from the fields of "type"
     public static Obj findField(String name, Struct type) {
-        TODO  // fill in the code
+        for (Obj field = type.fields; field != null; field = field.next){
+            if (field.name.equals(name)) { return field; }
+        }
+        error("Class Has No Field Named " + name);
+        return noObj;
     }
 
     //---------------- methods for dumping the symbol table --------------
