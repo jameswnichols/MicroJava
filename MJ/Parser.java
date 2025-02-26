@@ -140,10 +140,16 @@ public class Parser {
 
         if (sym == number) {
             scan();
+            if (type != Tab.intType){
+                error("Expected Type Char");
+            }
             obj.val = t.numVal;
         }
         else if (sym == charCon) {
             scan();
+            if (type != Tab.charType){
+                error("Expected Type Int");
+            }
             obj.val = t.numVal;
         }
         else {
@@ -155,16 +161,16 @@ public class Parser {
     // VarDecl = Type ident {"," ident } ";".
     private static void VarDecl() {
 
-        Struct s;
+        Struct type;
 
-        s = Type();
+        type = Type();
         check(ident);
-        Tab.insert(Obj.Var, t.val, s);
+        Tab.insert(Obj.Var, t.val, type);
         while (true) {
             if (sym == comma) {
                 scan();
                 check(ident);
-                Tab.insert(Obj.Var, t.val, s);
+                Tab.insert(Obj.Var, t.val, type);
             } else {
                 break;
             }
@@ -174,12 +180,12 @@ public class Parser {
 
     // ClassDecl = "class" ident "{" {VarDecl} "}".
     private static void ClassDecl(){
-        Struct s;
+        Struct type;
         check(class_);
         check(ident);
 
-        s = new Struct(Struct.Class);
-        Tab.insert(Obj.Type, t.val, s);
+        type = new Struct(Struct.Class);
+        Tab.insert(Obj.Type, t.val, type);
         Tab.openScope();
 
         check(lbrace);
@@ -187,8 +193,8 @@ public class Parser {
             VarDecl();
         }
 
-        s.fields = Tab.curScope.locals;
-        s.nFields = Tab.curScope.nVars;
+        type.fields = Tab.curScope.locals;
+        type.nFields = Tab.curScope.nVars;
 
         check(rbrace);
         Tab.closeScope();
@@ -422,13 +428,21 @@ public class Parser {
 
     // Designator = ident {"." ident | "[" Expr "]"}.
     private static void Designator(){
+        Obj obj;
+
         check(ident);
+        obj = Tab.find(t.val);
+
         while (true){
             if (sym == period) {
                 scan();
                 check(ident);
+                obj = Tab.findField(t.val, obj.type);
             }else if (sym == lbrack) {
                 scan();
+                if (obj.type.kind != Struct.Arr){
+                    error("Expected Array");
+                }
                 Expr();
                 check(rbrack);
             } else{
