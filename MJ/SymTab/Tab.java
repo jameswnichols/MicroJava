@@ -47,8 +47,14 @@ public class Tab {
     }
 
     // Retrieve the object with the given name from the top scope
-    public static Obj find(String name) {
-        TODO  // fill in the code
+    static Obj find (String name) {
+        for (Scope s = curScope; s != null; s = s.outer) {
+            for (Obj p = s.locals; p != null; p = p.next) {
+                if (p.name.equals(name)) {return p;}
+            }
+        }
+        error(name + " is undeclared");
+        return noObj;
     }
 
     // Retrieve a class field with the given name from the fields of "type"
