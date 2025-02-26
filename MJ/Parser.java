@@ -5,7 +5,6 @@ package MJ;
 
 import MJ.SymTab.Tab;
 
-import javax.swing.plaf.nimbus.State;
 import java.util.*;
 import MJ.SymTab.*;
 //import MJ.CodeGen.*;
@@ -410,6 +409,10 @@ public class Parser {
             else if (sym == new_){
                 scan();
                 check(ident);
+                Obj obj = Tab.find(t.val);
+                if (obj.kind != Obj.Type){
+                    error("Type Expected.");
+                }
                 if (sym == lbrack){
                     scan();
                     Expr();
