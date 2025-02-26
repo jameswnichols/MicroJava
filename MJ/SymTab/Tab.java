@@ -14,6 +14,7 @@ public class Tab {
     public static Struct intType;	// predefined types
     public static Struct charType;
     public static Struct booleanType;
+    public static Struct floatType;
     public static Struct nullType;
     public static Struct noType;
     public static Obj chrObj;		// predefined objects
@@ -88,6 +89,7 @@ public class Tab {
             case Struct.Arr:  kind = "Arr  "; break;
             case Struct.Class:kind = "Class"; break;
             case Struct.Boolean:kind = "Bool "; break;
+            case Struct.Float:kind = "Float"; break;
             default: kind = "None";
         }
         System.out.print(kind+" ");
@@ -135,6 +137,7 @@ public class Tab {
         intType = new Struct(Struct.Int);
         charType = new Struct(Struct.Char);
         booleanType = new Struct(Struct.Boolean);
+        floatType = new Struct(Struct.Float);
         nullType = new Struct(Struct.Class);
         noType = new Struct(Struct.None);
         noObj = new Obj(Obj.Var, "???", noType);
@@ -143,6 +146,7 @@ public class Tab {
         insert(Obj.Type, "int", intType);
         insert(Obj.Type, "char", charType);
         insert(Obj.Type, "boolean", booleanType);
+        insert(Obj.Type, "float", floatType);
         insert(Obj.Con, "null", nullType);
         chrObj = insert(Obj.Meth, "chr", charType);
         chrObj.locals = new Obj(Obj.Var, "i", intType);

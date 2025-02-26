@@ -48,12 +48,13 @@ public class Parser {
             void_     = 34,
             while_    = 35,
             eof       = 36,
-            boolean_  = 37;
+            boolean_  = 37,
+            float_    = 38;
     private static final String[] name = { // token names for error messages
             "none", "identifier", "number", "char constant", "+", "-", "*", "/", "%",
             "==", "!=", "<", "<=", ">", ">=", "=", ";", ",", ".", "(", ")",
             "[", "]", "{", "}", "class", "else", "final", "if", "new", "print",
-            "program", "read", "return", "void", "while", "eof", "boolean"
+            "program", "read", "return", "void", "while", "eof", "boolean", "float"
     };
 
     private static Token t;				// current token (recently recognized)
@@ -127,7 +128,7 @@ public class Parser {
 
     }
 
-    // ConstDecl = "final" Type ident "=" (number | charConst | boolean_) ";".
+    // ConstDecl = "final" Type ident "=" (number | float_ | charConst | boolean_) ";".
     private static void ConstDecl(){
         Struct type;
         check(final_);
@@ -144,6 +145,13 @@ public class Parser {
                 error("Expected Type " + type.getName());
             }
             obj.val = t.numVal;
+        }
+        else if (sym == float_){
+            scan();
+            if (type != Tab.floatType){
+                error("Expected Type " + type.getName());
+            }
+            obj.fval = t.fVal;
         }
         else if (sym == charCon) {
             scan();
@@ -418,6 +426,9 @@ public class Parser {
             else if (sym == boolean_){
                 scan();
             }
+            else if (sym == float_){
+                scan();
+            }
             else if (sym == new_){
                 scan();
                 check(ident);
@@ -504,7 +515,7 @@ public class Parser {
         relop.set(eql); relop.set(neq); relop.set(gtr); relop.set(geq); relop.set(lss); relop.set(leq);
 
         s = new BitSet(64); FactorSet = s;
-        FactorSet.set(ident); FactorSet.set(number); FactorSet.set(charCon);
+        FactorSet.set(ident); FactorSet.set(number); FactorSet.set(float_); FactorSet.set(charCon);
         FactorSet.set(boolean_); FactorSet.set(new_); FactorSet.set(lpar);
 
         // start parsing

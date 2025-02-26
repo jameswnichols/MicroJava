@@ -11,7 +11,8 @@ public class Struct {
             Char  = 2,
             Arr   = 3,
             Class = 4,
-            Boolean = 5;
+            Boolean = 5,
+            Float = 6;
 
     public int    kind;		  // None, Int, Char, Arr, Class, Boolean
     public Struct elemType; // Arr: element type
@@ -26,6 +27,7 @@ public class Struct {
             case Arr: return "Arr";
             case Class: return "Class";
             case Boolean: return "Boolean";
+            case Float: return "Float";
             default: return "???";
         }
     }

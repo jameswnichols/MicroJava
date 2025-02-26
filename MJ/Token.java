@@ -9,4 +9,5 @@ public class Token {
     public int col;			// token column
     public String val;	// token value
     public int numVal;	// numeric token value (for number and charConst)
+    public float fVal;
 }

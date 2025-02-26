@@ -45,7 +45,8 @@ public class Scanner {
             void_     = 34,
             while_    = 35,
             eof       = 36, // end-of-file token
-            boolean_    = 37;
+            boolean_  = 37,
+            float_    = 38;
 
     private static final String key[] = { // sorted list of keywords
             "class", "else", "final", "if", "new", "print",
@@ -160,9 +161,13 @@ public class Scanner {
     }
 
     private static void readNumber(Token t){
+        boolean IsFloat = false;
         while (ch != eofCh && ch != eol) { // Loop through input, until a white space.
-            if (!Character.isDigit(ch)){
+            if (!Character.isDigit(ch) && ch != '.'){
                 break;
+            }
+            if (ch == '.'){
+                IsFloat = true;
             }
             if (t.val == null) {
                 t.val = String.valueOf(ch);
@@ -172,6 +177,18 @@ public class Scanner {
             }
             nextCh();
         }
+
+        if (IsFloat){
+            try{
+                t.fVal = Float.parseFloat(t.val);
+                t.kind = float_;
+                return;
+            }
+            catch (NumberFormatException nfe) {
+                System.out.println("Error: Reading Float.");
+            }
+        }
+
         long temp =  Long.parseLong(t.val);
         if (temp > Integer.MAX_VALUE){
             System.out.println("Error: Integer Overflow.");
@@ -180,6 +197,7 @@ public class Scanner {
             t.numVal = (int) temp;
         }
         t.kind = number;
+
     }
 
     private static void readCharCon(Token t){

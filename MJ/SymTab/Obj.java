@@ -16,6 +16,7 @@ public class Obj {
     public String name;		// object name
     public Struct type;	 	// object type
     public int    val;    // Con: value
+    public float  fval; // Con: float value
     public int    adr;    // Var, Meth: address
     public int    level;  // Var: declaration level
     public int    nPars;  // Meth: number of parameters
