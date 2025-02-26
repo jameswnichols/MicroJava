@@ -7,7 +7,7 @@ import MJ.SymTab.Tab;
 
 import javax.swing.plaf.nimbus.State;
 import java.util.*;
-//import MJ.SymTab.*;
+import MJ.SymTab.*;
 //import MJ.CodeGen.*;
 
 public class Parser {
@@ -62,7 +62,7 @@ public class Parser {
     public  static int errors;  	// error counter
     private static int errDist;		// no. of correctly recognized tokens since last error
 
-    // private static Obj curMethod;	// currently compiled method
+    private static Obj curMethod;	// currently compiled method
 
     //----------- terminal first/sync sets; initialized in method parse() -----
     private static BitSet firstExpr, firstStat, syncStat, syncDecl, relop, FactorSet;
@@ -200,12 +200,25 @@ public class Parser {
     }
 
     // Type = ident ["[" "]"].
-    private static void Type(){
+    private static Struct Type(){
         check(ident);
+
+        int kind = 0;
+        switch (t.kind){
+            case (number): kind = Struct.Int; break;
+            case (charCon): kind = Struct.Char; break;
+            case (class_): kind = Struct.Class; break;
+            default: break;
+        }
+        Struct s = new Struct(kind);
+
         if (sym == lbrack) {
             scan();
             check(rbrack);
+            return new Struct(Struct.Arr, s);
         }
+
+        return s;
     }
 
     // Block = "{" {Statement} "}".
