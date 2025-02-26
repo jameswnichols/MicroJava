@@ -53,7 +53,7 @@ public class Parser {
             "none", "identifier", "number", "char constant", "+", "-", "*", "/", "%",
             "==", "!=", "<", "<=", ">", ">=", "=", ";", ",", ".", "(", ")",
             "[", "]", "{", "}", "class", "else", "final", "if", "new", "print",
-            "program", "read", "return", "void", "while", "eof"
+            "program", "read", "return", "void", "while", "eof", "boolean"
     };
 
     private static Token t;				// current token (recently recognized)
