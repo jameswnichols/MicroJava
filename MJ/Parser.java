@@ -196,35 +196,44 @@ public class Parser {
 
     // MethodDecl = (Type | "void") ident "(" [FormPars] ")" {VarDecl} Block.
     private static void MethodDecl(){
-        Tab.openScope();
+        Struct s = Tab.noType;
         if (sym == ident) {
-            Type();
+            s = Type();
         } else if (sym == void_) {
             scan();
         } else {
             error("Invalid Method Declaration.");
         }
         check(ident);
+
+        curMethod = Tab.insert(Obj.Meth, t.val, s);
+
+        Tab.openScope();
         check(lpar);
         if (sym == ident) {
             FormPars();
         }
+        curMethod.nPars = Tab.curScope.nVars;
         check(rpar);
         while (sym == ident) {
             VarDecl();
         }
+        curMethod.locals = Tab.curScope.locals;
         Block();
         Tab.closeScope();
     }
 
     // FormPars = Type ident {"," Type ident}.
     private static void FormPars(){
-        Type();
+        Struct s;
+        s = Type();
         check(ident);
+        Tab.insert(Obj.Var, t.val, s);
         while (sym == comma) {
             scan();
             Type();
             check(ident);
+            Tab.insert(Obj.Var, t.val, s);
         }
     }
 
@@ -233,12 +242,15 @@ public class Parser {
         check(ident);
 
         Obj obj = Tab.find(t.val);
+        if (obj.kind != Obj.Type){
+            error("Type Expected.");
+        }
         Struct s = obj.type;
 
         if (sym == lbrack) {
             scan();
             check(rbrack);
-            return new Struct(Struct.Arr, s);
+            s = new Struct(Struct.Arr, s);
         }
 
         return s;
