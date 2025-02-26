@@ -10,8 +10,10 @@ public class Struct {
             Int   = 1,
             Char  = 2,
             Arr   = 3,
-            Class = 4;
-    public int    kind;		  // None, Int, Char, Arr, Class
+            Class = 4,
+            Boolean = 5;
+
+    public int    kind;		  // None, Int, Char, Arr, Class, Boolean
     public Struct elemType; // Arr: element type
     public int    nFields;  // Class: number of fields
     public Obj    fields;   // Class: fields

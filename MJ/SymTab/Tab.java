@@ -13,6 +13,7 @@ public class Tab {
 
     public static Struct intType;	// predefined types
     public static Struct charType;
+    public static Struct booleanType;
     public static Struct nullType;
     public static Struct noType;
     public static Obj chrObj;		// predefined objects
@@ -132,6 +133,7 @@ public class Tab {
         // create predeclared types
         intType = new Struct(Struct.Int);
         charType = new Struct(Struct.Char);
+        booleanType = new Struct(Struct.Boolean);
         nullType = new Struct(Struct.Class);
         noType = new Struct(Struct.None);
         noObj = new Obj(Obj.Var, "???", noType);
@@ -139,6 +141,7 @@ public class Tab {
         // create predeclared objects
         insert(Obj.Type, "int", intType);
         insert(Obj.Type, "char", charType);
+        insert(Obj.Type, "boolean", booleanType);
         insert(Obj.Con, "null", nullType);
         chrObj = insert(Obj.Meth, "chr", charType);
         chrObj.locals = new Obj(Obj.Var, "i", intType);
