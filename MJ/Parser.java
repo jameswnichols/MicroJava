@@ -122,17 +122,30 @@ public class Parser {
             MethodDecl();
         }
         check(rbrace);
+        Tab.dumpScope(Tab.curScope.locals);
         Tab.closeScope();
+
     }
 
     // ConstDecl = "final" Type ident "=" (number | charConst) ";".
     private static void ConstDecl(){
+        Struct type;
         check(final_);
-        Type();
+        type = Type();
         check(ident);
+
+        Obj obj = Tab.insert(Obj.Con, t.val, type);
+
         check(assign);
-        if (sym == number) {scan();}
-        else if (sym == charCon) {scan();}
+
+        if (sym == number) {
+            scan();
+            obj.val = t.numVal;
+        }
+        else if (sym == charCon) {
+            scan();
+            obj.val = t.numVal;
+        }
         else {
             error("Invalid Constant Declaration");
         }
@@ -141,12 +154,17 @@ public class Parser {
 
     // VarDecl = Type ident {"," ident } ";".
     private static void VarDecl() {
-        Type();
+
+        Struct s;
+
+        s = Type();
         check(ident);
+        Tab.insert(Obj.Var, t.val, s);
         while (true) {
             if (sym == comma) {
                 scan();
                 check(ident);
+                Tab.insert(Obj.Var, t.val, s);
             } else {
                 break;
             }
@@ -156,11 +174,22 @@ public class Parser {
 
     // ClassDecl = "class" ident "{" {VarDecl} "}".
     private static void ClassDecl(){
-        Tab.openScope();
+        Struct s;
         check(class_);
         check(ident);
+
+        s = new Struct(Struct.Class);
+        Tab.insert(Obj.Type, t.val, s);
+        Tab.openScope();
+
         check(lbrace);
-        while (sym == ident) {VarDecl();}
+        while (sym == ident) {
+            VarDecl();
+        }
+
+        s.fields = Tab.curScope.locals;
+        s.nFields = Tab.curScope.nVars;
+
         check(rbrace);
         Tab.closeScope();
     }
@@ -203,14 +232,8 @@ public class Parser {
     private static Struct Type(){
         check(ident);
 
-        int kind = 0;
-        switch (t.kind){
-            case (number): kind = Struct.Int; break;
-            case (charCon): kind = Struct.Char; break;
-            case (class_): kind = Struct.Class; break;
-            default: break;
-        }
-        Struct s = new Struct(kind);
+        Obj obj = Tab.find(t.val);
+        Struct s = obj.type;
 
         if (sym == lbrack) {
             scan();
