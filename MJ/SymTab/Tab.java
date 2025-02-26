@@ -115,11 +115,15 @@ public class Tab {
         System.out.println(")");
     }
 
-    public static void dumpScope(Obj head) {
-        System.out.println("--------------");
+    public static void dumpScope(String name, Obj head) {
+        String prefix = "";
+        System.out.println(name + " --------------");
         for (Obj o = head; o != null; o = o.next) dumpObj(o);
         for (Obj o = head; o != null; o = o.next)
-            if (o.kind == Obj.Meth || o.kind == Obj.Prog) dumpScope(o.locals);
+            if (o.kind == Obj.Meth || o.kind == Obj.Prog){
+                if (o.kind == Obj.Meth) prefix = "Method: ";
+                dumpScope(prefix + o.name, o.locals);
+            }
     }
 
     //-------------- initialization of the symbol table ------------

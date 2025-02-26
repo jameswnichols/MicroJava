@@ -121,7 +121,7 @@ public class Parser {
             MethodDecl();
         }
         check(rbrace);
-        Tab.dumpScope(Tab.curScope.locals);
+        Tab.dumpScope("Globals", Tab.curScope.locals);
         Tab.closeScope();
 
     }
