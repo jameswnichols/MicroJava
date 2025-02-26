@@ -18,6 +18,18 @@ public class Struct {
     public int    nFields;  // Class: number of fields
     public Obj    fields;   // Class: fields
 
+    public String getName(){
+        switch (kind){
+            case None: return "None";
+            case Int: return "Int";
+            case Char: return "Char";
+            case Arr: return "Arr";
+            case Class: return "Class";
+            case Boolean: return "Boolean";
+            default: return "???";
+        }
+    }
+
     public Struct(int kind) {
         this.kind = kind;
     }

@@ -47,7 +47,8 @@ public class Parser {
             return_   = 33,
             void_     = 34,
             while_    = 35,
-            eof       = 36;
+            eof       = 36,
+            boolean_  = 37;
     private static final String[] name = { // token names for error messages
             "none", "identifier", "number", "char constant", "+", "-", "*", "/", "%",
             "==", "!=", "<", "<=", ">", ">=", "=", ";", ",", ".", "(", ")",
@@ -126,7 +127,7 @@ public class Parser {
 
     }
 
-    // ConstDecl = "final" Type ident "=" (number | charConst) ";".
+    // ConstDecl = "final" Type ident "=" (number | charConst | boolean_) ";".
     private static void ConstDecl(){
         Struct type;
         check(final_);
@@ -140,16 +141,24 @@ public class Parser {
         if (sym == number) {
             scan();
             if (type != Tab.intType){
-                error("Expected Type Char");
+                error("Expected Type " + type.getName());
             }
             obj.val = t.numVal;
         }
         else if (sym == charCon) {
             scan();
             if (type != Tab.charType){
-                error("Expected Type Int");
+                error("Expected Type " + type.getName());
             }
             obj.val = t.numVal;
+        }
+        else if (sym == boolean_){
+            scan();
+            if (type != Tab.booleanType){
+                error("Expected Type " + type.getName());
+            }
+            obj.val = 0;
+            if (t.val.equals("true")) obj.val = 1;
         }
         else {
             error("Invalid Constant Declaration");
@@ -406,6 +415,9 @@ public class Parser {
             else if (sym == charCon){
                 scan();
             }
+            else if (sym == boolean_){
+                scan();
+            }
             else if (sym == new_){
                 scan();
                 check(ident);
@@ -492,7 +504,8 @@ public class Parser {
         relop.set(eql); relop.set(neq); relop.set(gtr); relop.set(geq); relop.set(lss); relop.set(leq);
 
         s = new BitSet(64); FactorSet = s;
-        FactorSet.set(ident); FactorSet.set(number); FactorSet.set(charCon); FactorSet.set(new_); FactorSet.set(lpar);
+        FactorSet.set(ident); FactorSet.set(number); FactorSet.set(charCon);
+        FactorSet.set(boolean_); FactorSet.set(new_); FactorSet.set(lpar);
 
         // start parsing
         errors = 0; errDist = 3;

@@ -87,6 +87,7 @@ public class Tab {
             case Struct.Char: kind = "Char "; break;
             case Struct.Arr:  kind = "Arr  "; break;
             case Struct.Class:kind = "Class"; break;
+            case Struct.Boolean:kind = "Bool "; break;
             default: kind = "None";
         }
         System.out.print(kind+" ");

@@ -44,15 +44,18 @@ public class Scanner {
             return_   = 33,
             void_     = 34,
             while_    = 35,
-            eof       = 36; // end-of-file token
+            eof       = 36, // end-of-file token
+            boolean_    = 37;
 
     private static final String key[] = { // sorted list of keywords
             "class", "else", "final", "if", "new", "print",
-            "program", "read", "return", "void", "while"
+            "program", "read", "return", "void", "while",
+            "false", "true"
     };
     private static final int keyVal[] = {
             class_, else_, final_, if_, new_, print_,
-            program_, read_, return_, void_, while_
+            program_, read_, return_, void_, while_,
+            boolean_, boolean_
     };
 
     private static char ch;			// lookahead character
