@@ -27,7 +27,10 @@ public class Tab {
     //------------------ scope management ---------------------
 
     public static void openScope() {
-        TODO  // fill in the code
+        Scope s = new Scope();
+        s.outer = curScope;
+        curScope = s;
+        curLevel++;
     }
 
     static void closeScope() {
