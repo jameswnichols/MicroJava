@@ -3,6 +3,8 @@
 */
 package MJ;
 
+import MJ.SymTab.Tab;
+
 import javax.swing.plaf.nimbus.State;
 import java.util.*;
 //import MJ.SymTab.*;
@@ -95,6 +97,7 @@ public class Parser {
 
     // Program = "program" ident {ConstDecl | ClassDecl | VarDecl} '{' {MethodDecl} '}'.
     private static void Program() {
+        Tab.openScope();
         check(program_);
         check(ident);
         while (true) {
@@ -119,6 +122,7 @@ public class Parser {
             MethodDecl();
         }
         check(rbrace);
+        Tab.closeScope();
     }
 
     // ConstDecl = "final" Type ident "=" (number | charConst) ";".
@@ -152,15 +156,18 @@ public class Parser {
 
     // ClassDecl = "class" ident "{" {VarDecl} "}".
     private static void ClassDecl(){
+        Tab.openScope();
         check(class_);
         check(ident);
         check(lbrace);
         while (sym == ident) {VarDecl();}
         check(rbrace);
+        Tab.closeScope();
     }
 
     // MethodDecl = (Type | "void") ident "(" [FormPars] ")" {VarDecl} Block.
     private static void MethodDecl(){
+        Tab.openScope();
         if (sym == ident) {
             Type();
         } else if (sym == void_) {
@@ -178,6 +185,7 @@ public class Parser {
             VarDecl();
         }
         Block();
+        Tab.closeScope();
     }
 
     // FormPars = Type ident {"," Type ident}.

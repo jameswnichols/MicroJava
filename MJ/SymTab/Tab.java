@@ -33,7 +33,7 @@ public class Tab {
         curLevel++;
     }
 
-    static void closeScope() {
+    public static void closeScope() {
         curScope = curScope.outer;
         curLevel--;
     }
