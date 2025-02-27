@@ -395,18 +395,44 @@ public class Parser {
         Code.load(x);
 
         op = Relop();
-
         y = Expr();
-
         Code.load(y);
         if (!x.type.compatibleWith(y.type)) {error("Type Mismatch");}
         if (!x.type.isRefType() && op != Code.eq && op != Code.ne) { error("Invalid Compare");}
     }
 
     // Relop = "==" | "!=" | ">" | ">=" | "<" | "<=".
-    private static void Relop(){
-        if (relop.get(sym)) {scan();}
-        else error("Invalid Comparison.");
+    // eql       = 9,
+    //            neq       = 10,
+    //            lss       = 11,
+    //            leq       = 12,
+    //            gtr       = 13,
+    //            geq       = 14,
+    private static int Relop(){
+        // relop.set(eql); relop.set(neq); relop.set(gtr); relop.set(geq); relop.set(lss); relop.set(leq);
+        switch (sym) {
+            case 9: // eql
+                scan();
+                return 0; // 0 == eql in codegen
+            case 10: // not eql
+                scan();
+                return 1;
+            case 11: //less
+                scan();
+                return 2;
+            case 12: // less or equal
+                scan();
+                return 3;
+            case 13: // greater
+                scan();
+                return 4;
+            case 14: // greater or equal
+                scan();
+                return 5;
+            default:
+                error("Invalid Comparison");
+                return -1;
+        }
     }
 
     // Expr = ["-"] Term {Addop Term}.
