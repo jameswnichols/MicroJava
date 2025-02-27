@@ -347,7 +347,7 @@ program MJSweeper
 	{ //---------- Initialize val
 	    CellAtPosition = null;
 	    HitMine = 0;
-        GenerateGrid(10, 10, 5);
+        GenerateGrid(10, 10, 10);
 
         Running = 1;
 
