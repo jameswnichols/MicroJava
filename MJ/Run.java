@@ -223,7 +223,7 @@ public class Run {
     //----- actual interpretation
 
     static void interpret() {
-        int op, adr, val, val2, off, idx, len, i;
+        int op, adr, val, val2, off, idx, len, i, ischar;
         pc = startPC;
         try {
             for (;;) { // terminated by return instruction
@@ -421,9 +421,16 @@ public class Run {
                         }
                         break;
                     case print:
+                        ischar = pop();
                         len = pop();
                         val = pop();
+
                         String s = new Integer(val).toString();
+
+                        if (ischar == 1){
+                            char v = (char) val;
+                            s = Character.toString(v);
+                        }
                         len = len - s.length();
                         for (i = 0; i < len; i++) System.out.print(' ');
                         for (i = 0; i < s.length(); i++) System.out.print(s.charAt(i));
