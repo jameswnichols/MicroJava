@@ -23,8 +23,8 @@ public class Run {
 
     static final int
             heapSize = 100000,		// size of the heap in words
-            mStackSize = 400,			// size of the method stack in words
-            eStackSize = 30;			// size of the expression stack in words
+            mStackSize = 50000,			// size of the method stack in words
+            eStackSize = 50000;			// size of the expression stack in words
 
     static final int				// instruction codes
             load        =  1,
