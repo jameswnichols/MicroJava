@@ -1,25 +1,405 @@
 program MJSweeper
 
+    class Position {
+        int X;
+        int Y;
+    }
+
     class Cell{
         int X;
         int Y;
 
+        int Uncovered;
         int MinesNearby;
         int HasMine;
+        int Flagged;
     }
 
 	class Grid {
 	    int Width;
 	    int Height;
 
+	    int CursorX;
+	    int CursorY;
+
+	    int UncoveredTiles;
+	    int MineCount;
+	    int FlagsPlaced;
+
+        Position[] Positions;
         Cell[] Cells;
-    	}
+    }
+
+    Grid grid;
+    Cell CellAtPosition;
+
     {
 
-	void main()
-	    Grid grid;
-	{ //---------- Initialize val
+    void GetCellAtPosition(int x, int y)
+            int i;
+        {
+            if (x < 0) {
+                CellAtPosition = null;
+            }
+            else if (x >= grid.Width) {
+                CellAtPosition = null;
+            }
+            else if (y < 0) {
+                CellAtPosition = null;
+            }
+            else if (y >= grid.Height) {
+                CellAtPosition = null;
+            }
+            else {
+                i = x + (y * grid.Width);
+                CellAtPosition = grid.Cells[i];
+            }
+        }
 
-		//i = val.i;
+    int UncoverTile(int x, int y)
+        int dx, dy, iszero, ismine;
+    {
+        ismine = 0;
+        GetCellAtPosition(x, y);
+        if (CellAtPosition != null){
+            CellAtPosition.Uncovered = 1;
+            grid.UncoveredTiles = grid.UncoveredTiles + 1;
+            ismine = CellAtPosition.HasMine;
+            if (CellAtPosition.Flagged == 1){
+                grid.FlagsPlaced = grid.FlagsPlaced - 1;
+            }
+            if (CellAtPosition.MinesNearby == 0){
+                iszero = 0;
+                dy = -1;
+                dx = -1;
+                while (dy <= 1){
+                    dx = -1;
+                    while (dx <= 1){
+                        iszero = 0;
+                        if (dx == 0){iszero = iszero + 1;}
+                        if (dy == 0){iszero = iszero + 1;}
+                        GetCellAtPosition(x + dx, y + dy);
+                        if (CellAtPosition != null){
+                            if (iszero != 2){
+                                if (CellAtPosition.Uncovered == 0) {
+                                    UncoverTile(CellAtPosition.X, CellAtPosition.Y);
+                                }
+                            }
+                        }
+                        dx = dx + 1;
+                    }
+                    dy = dy + 1;
+                }
+            }
+        }
+        return ismine;
+    }
+
+    void GetNearbyCells(int Index)
+        int x, y, nearMines, iszero;
+    {
+        x = -1;
+        y = -1;
+        nearMines = 0;
+
+        iszero = 0;
+
+        while (y <= 1){
+            x = -1;
+            while (x <= 1){
+                iszero = 0;
+                if (x == 0){iszero = iszero + 1;}
+                if (y == 0){iszero = iszero + 1;}
+                GetCellAtPosition(grid.Cells[Index].X + x, grid.Cells[Index].Y + y);
+                if (CellAtPosition != null){
+                    if (iszero != 2){
+                        if (CellAtPosition.HasMine == 1){
+                            nearMines = nearMines + 1;
+                        }
+                    }
+                }
+                x = x + 1;
+            }
+            y = y + 1;
+        }
+
+        grid.Cells[Index].MinesNearby = nearMines;
+
+    }
+
+    void ShuffleArray(Position[] Array)
+        int Size, i, j;
+        Position temp;
+        {
+            Size = len(Array);
+            if (Size > 1){
+                while (i < Size - 1){
+                    j = rand(i, Size - 1);
+                    temp = Array[j];
+                    Array[j] = Array[i];
+                    Array[i] = temp;
+                    i = i + 1;
+                }
+            }
+        }
+
+    void GenerateGrid(int Width, int Height, int Mines)
+        int Total;
+        int x, y, i, ActualMines, index;
+    {
+        grid = new Grid;
+        grid.CursorX = 0;
+        grid.CursorY = 0;
+        grid.Width = Width;
+        grid.Height = Height;
+        Total = Width * Height;
+        grid.MineCount = Mines;
+        grid.UncoveredTiles = 0;
+        grid.FlagsPlaced = 0;
+        grid.Positions = new Position[Total];
+        grid.Cells = new Cell[Total];
+
+        ActualMines = Mines;
+        if (Mines > Total){
+            ActualMines = Total;
+        }
+
+        x = 0;
+        y = 0;
+        i = 0;
+        while (i < Total){
+            grid.Positions[i] = new Position;
+            grid.Positions[i].X = x;
+            grid.Positions[i].Y = y;
+
+            grid.Cells[i] = new Cell;
+            grid.Cells[i].X = x;
+            grid.Cells[i].Y = y;
+            grid.Cells[i].Flagged = 0;
+            grid.Cells[i].Uncovered = 0;
+            grid.Cells[i].HasMine = 0;
+            grid.Cells[i].MinesNearby = 0;
+
+            x = x + 1;
+            if (x == Width){
+                x = 0;
+                y = y + 1;
+            }
+            i = i + 1;
+        }
+
+        ShuffleArray(grid.Positions);
+
+        i = 0;
+        while (i < ActualMines){
+            index = grid.Positions[i].X + (grid.Positions[i].Y * Width);
+            grid.Cells[index].HasMine = 1;
+            i = i + 1;
+        }
+        i = 0;
+        while (i < Total){
+            GetNearbyCells(i);
+            i = i + 1;
+        }
+
+    }
+
+    void RenderGrid()
+        int Size, i, x, hascursor;
+    {
+        i = 0;
+        x = 0;
+
+        Size = grid.Width * grid.Height;
+        while (i < Size){
+            hascursor = 0;
+            if (grid.Cells[i].X == grid.CursorX) hascursor = hascursor + 1;
+            if (grid.Cells[i].Y == grid.CursorY) hascursor = hascursor + 1;
+
+            if (hascursor == 2){
+                print('*');
+            }
+            else if (grid.Cells[i].Uncovered == 1){
+                if (grid.Cells[i].MinesNearby > 0){
+                    print(grid.Cells[i].MinesNearby, 1);
+                }
+                else{
+                    print('.');
+                }
+
+            }
+            else {
+                if (grid.Cells[i].Flagged == 1){
+                    print('>');
+                }
+                else {
+                    print('#');
+                }
+
+            }
+
+            print(' ');
+            x = x + 1;
+            if (x == grid.Width){
+                x = 0;
+                print('\n');
+            }
+            i = i + 1;
+        }
+    }
+
+    void MoveCursorLeft()
+    {
+        if (grid.CursorX > 0) grid.CursorX = grid.CursorX - 1;
+    }
+
+    void MoveCursorRight()
+        {
+            if (grid.CursorX < grid.Width - 1) grid.CursorX = grid.CursorX + 1;
+        }
+
+    void MoveCursorUp()
+        {
+            if (grid.CursorY > 0) grid.CursorY = grid.CursorY - 1;
+        }
+
+    void MoveCursorDown()
+        {
+            if (grid.CursorY < grid.Height - 1) grid.CursorY = grid.CursorY + 1;
+        }
+
+    void Flag()
+    {
+        GetCellAtPosition(grid.CursorX, grid.CursorY);
+        if (CellAtPosition != null){
+            if (CellAtPosition.Flagged == 0){
+                CellAtPosition.Flagged = 1;
+                grid.FlagsPlaced = grid.FlagsPlaced + 1;
+            }
+            else {
+                CellAtPosition.Flagged = 0;
+                grid.FlagsPlaced = grid.FlagsPlaced - 1;
+            }
+        }
+    }
+
+    void ClearScreen()
+        int i;
+    {
+        i = 0;
+        while (i < 50){
+            print('\n');
+            i = i + 1;
+        }
+    }
+
+    void PrintYouWin()
+    {
+        print('Y');
+        print('o');
+        print('u');
+        print(' ');
+        print('W');
+        print('i');
+        print('n');
+        print(' ');
+        print(':');
+        print(')');
+        print('\n');
+    }
+
+    void PrintYouLose()
+    {
+        print('Y');
+        print('o');
+        print('u');
+        print(' ');
+        print('L');
+        print('o');
+        print('s');
+        print('e');
+        print(' ');
+        print(':');
+        print('(');
+        print('\n');
+    }
+
+    void PrintMinesRemaining()
+    {
+        print('M');
+        print('i');
+        print('n');
+        print('e');
+        print('s');
+        print(' ');
+        print('L');
+        print('e');
+        print('f');
+        print('t');
+        print(':');
+        print(' ');
+        print(grid.MineCount - grid.FlagsPlaced, 4);
+        print('\n');
+    }
+
+	void main()
+	    int UserInput, Running, HitMine;
+	{ //---------- Initialize val
+	    CellAtPosition = null;
+	    HitMine = 0;
+        GenerateGrid(10, 10, 5);
+
+        Running = 1;
+
+        while (Running == 1){
+
+            HitMine = 0;
+
+            ClearScreen();
+
+            PrintMinesRemaining();
+
+            RenderGrid();
+
+            print('>');
+            print(' ');
+
+            read(UserInput);
+
+            if (UserInput == 1){
+                MoveCursorLeft();
+            }
+            else if (UserInput == 2){
+                MoveCursorRight();
+            }
+            else if (UserInput == 3){
+                MoveCursorDown();
+            }
+            else if (UserInput == 4){
+                MoveCursorUp();
+            }
+            else if (UserInput == 5){
+                GetCellAtPosition(grid.CursorX, grid.CursorY);
+                if (CellAtPosition != null){
+                    if (CellAtPosition.Flagged == 0){
+                        HitMine = UncoverTile(grid.CursorX, grid.CursorY);
+                    }
+                }
+            }
+            else if (UserInput == 6){
+                Flag();
+            }
+
+            if (HitMine == 1){
+                PrintYouLose();
+                Running = 0;
+            }
+
+            if ((grid.Width * grid.Height) - grid.MineCount == grid.UncoveredTiles){
+                PrintYouWin();
+                Running = 0;
+            }
+
+        }
 	}
 }
