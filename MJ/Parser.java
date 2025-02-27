@@ -229,17 +229,21 @@ public class Parser {
     }
 
     // FormPars = Type ident {"," Type ident}.
-    private static void FormPars(){
+    private static int FormPars(){
+        int n = 0;
         Struct s;
         s = Type();
         check(ident);
         Tab.insert(Obj.Var, t.val, s);
+        n++;
         while (sym == comma) {
             scan();
             Type();
             check(ident);
             Tab.insert(Obj.Var, t.val, s);
+            n++;
         }
+        return n;
     }
 
     // Type = ident ["[" "]"].
