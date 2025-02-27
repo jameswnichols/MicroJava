@@ -294,8 +294,9 @@ public class Parser {
         }
         else if (sym == if_) {
             scan();
+
             check(lpar);
-            Condition();
+            int op = Condition();
             check(rpar);
             Statement();
             if (sym == else_) {
@@ -387,7 +388,7 @@ public class Parser {
     }
 
     // Condition = Expr Relop Expr.
-    private static void Condition(){
+    private static int Condition(){
         int op; Operand x, y;
 
         x = Expr();
@@ -399,6 +400,7 @@ public class Parser {
         Code.load(y);
         if (!x.type.compatibleWith(y.type)) {error("Type Mismatch");}
         if (!x.type.isRefType() && op != Code.eq && op != Code.ne) { error("Invalid Compare");}
+        return op;
     }
 
     // Relop = "==" | "!=" | ">" | ">=" | "<" | "<=".
