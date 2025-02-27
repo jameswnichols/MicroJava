@@ -647,11 +647,14 @@ public class Parser {
 
     // Designator = ident {"." ident | "[" Expr "]"}.
     private static Operand Designator(){
+        String name;
         Operand x,y;
         Obj obj;
 
         check(ident);
-        obj = Tab.find(t.val);
+        name = t.val;
+        obj = Tab.find(name);
+
         x = new Operand(obj);
 
         while (true){
@@ -668,13 +671,11 @@ public class Parser {
             }else if (sym == lbrack) {
                 scan();
 
-                String name = t.val;
-
-                Obj obj_arr = Tab.find(name);
+                Code.load(x);
 
                 y = Expr(); // comment out until Expr is done.
-                Code.load(x);
-                if (obj_arr.type.kind == Struct.Arr) {
+
+                if (x.type.kind == Struct.Arr) {
                     if (y.type != Tab.intType) { error("Index Must be of Type Int");}
                     Code.load(y);
                     x.kind = Operand.Elem;
