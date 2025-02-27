@@ -3,11 +3,12 @@
 */
 package MJ;
 
+import MJ.CodeGen.Operand;
 import MJ.SymTab.Tab;
 
 import java.util.*;
 import MJ.SymTab.*;
-//import MJ.CodeGen.*;
+import MJ.CodeGen.*;
 
 public class Parser {
     private static final int  // token codes
@@ -431,22 +432,39 @@ public class Parser {
 
     // Designator = ident {"." ident | "[" Expr "]"}.
     private static void Designator(){
+        Operand x,y;
         Obj obj;
 
         check(ident);
         obj = Tab.find(t.val);
+        x = new Operand(obj);
 
         while (true){
             if (sym == period) {
-                scan();
-                check(ident);
-                obj = Tab.findField(t.val, obj.type);
+                if (x.type.kind == Struct.Class) {
+                    scan();
+                    check(ident);
+                    Code.load(x);
+                    Obj fld = Tab.findField(t.val, x.type);
+                    x.kind = Operand.Fld;
+                    x.adr = fld.adr;
+                    x.type = fld.type;
+                }else {error(name + "Is not An Object.");}
             }else if (sym == lbrack) {
                 scan();
-                if (obj.type.kind != Struct.Arr){
-                    error("Expected Array");
-                }
-                Expr();
+
+                String name = t.val;
+
+                Obj obj_arr = Tab.find(name);
+
+                //y = Expr(); // comment out until Expr is done.
+                Code.load(x);
+                if (obj.type.kind == Struct.Arr) {
+                    if (y.type != Tab.intType) { error("Index Must be of Type Int");}
+                    Code.load(y);
+                    x.kind = Operand.Elem;
+                    x.type = x.type.elemType;
+                } else { error("Expected Array");}
                 check(rbrack);
             } else{
                 break;
