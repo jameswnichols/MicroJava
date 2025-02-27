@@ -272,6 +272,7 @@ public class Parser {
 
     //
     private static void Statement(){
+        Operand x, y;
         if (!firstStat.get(sym)) {
             error("Invalid Start of Statement");
             while (!syncStat.get(sym)) scan();
@@ -279,14 +280,26 @@ public class Parser {
         }
         // Designator ("=" Expr | ActPars) ";"
         if (sym == ident) {
-            Designator();
+            x = Designator();
 
             if (sym == assign) {
                 scan();
-                Expr();
+                y = Expr();
+                if (y.type.assignableTo(x.type)){
+                    Code.load(y);
+                    Code.assignTo(x);
+                }
+                else{
+                    error("Incompatible Types In Assignment");
+                }
             }
             else if (sym == lpar) {
-                ActPars();
+                ActPars(x);
+                Code.put(Code.call);
+                Code.put2(x.adr);
+                if (x.type != Tab.noType){
+                    Code.put(Code.pop);
+                }
             }
             else {error("Invalid Assignment or Call.");}
 
@@ -327,8 +340,20 @@ public class Parser {
         else if (sym == return_) {
             scan();
             if (sym == minus || sym == ident) {
-                Expr();
+                x= Expr();
+                Code.load(x);
+                if (curMethod.type == Tab.noType){
+                    error("Void Method Must Not Return A Value");
+                }
+                else if (!x.type.assignableTo(curMethod.type)){
+                    error("Type Of Return Value Must Match Method Type");
+                }
             }
+            if (curMethod.type != Tab.noType){
+                error("Return Value Expected");
+            }
+            Code.put(Code.exit);
+            Code.put(Code.return_);
             check(semicolon);
         }
         else if (sym == read_) {
