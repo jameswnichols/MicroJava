@@ -483,10 +483,20 @@ public class Parser {
         if (sym == minus){
             scan();
         }
-        Term();
+        x = Term();
+        if (x.type != Tab.intType){
+            error("Operand must be of type int.");
+        }
+
         while (sym == plus || sym == minus){
-            Addop();
-            Term();
+            op = Addop();
+            Code.load(x);
+            y = Term();
+            Code.load(y);
+            if (x.type != Tab.intType || y.type != Tab.intType) {
+                error("Operands must be of type int.");
+            }
+            Code.put(op);
         }
         return x;
     }
@@ -592,9 +602,13 @@ public class Parser {
     }
 
     // Addop = "+" | "-".
-    private static void Addop(){
+    private static int Addop(){
         if (sym == plus || sym == minus){
             scan();
+            switch (t.kind){
+                case plus: return Code.add;
+                case minus: return Code.sub;
+            }
         }else{
             error("Invalid + or - Operation.");
         }
