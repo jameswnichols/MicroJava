@@ -452,15 +452,22 @@ public class Parser {
     }
 
     // Term = Factor {Mulop Factor}.
-    private static void Term(){
+    private static Operand Term(){
         Operand x, y;
         int op;
 
-        Factor();
+        x = Factor();
         while (sym == times || sym == slash || sym == rem){
-            Mulop();
-            Factor();
+            op = Mulop();
+            Code.load(x);
+            y = Factor();
+            Code.load(y);
+            if (x.type != Tab.intType || y.type != Tab.intType){
+                error("Operands Must Be Of Type Int");
+            }
+            Code.put(op);
         }
+        return x;
     }
 
     //
@@ -554,12 +561,18 @@ public class Parser {
     }
 
     // Mulop = "*" | "/" | "%".
-    private static void Mulop(){
+    private static int Mulop(){
         if (sym == times || sym == slash || sym == rem){
             scan();
+            switch (t.kind){
+                case times: return Code.mul;
+                case slash: return Code.div;
+                case rem: return Code.rem;
+            }
         }else{
             error("Invalid * or / or % Operation.");
         }
+        return -1;
     }
 
     public static void parse() {
