@@ -136,7 +136,20 @@ public class Code {
     }
     // Generate an assignment x = y; y has already been loaded
     public static void assignTo(Operand x) {
-        TODO  // fill in the code
+        switch(x.kind){
+            case Operand.Local:
+                if (0 <= x.adr && x.adr <=3) {put(store0 + x.adr);}
+                else {put(store); put(x.adr);}
+                break;
+            case Operand.Static:
+                put(putstatic); put2(x.adr); break;
+            case Operand.Fld:
+                put(putfield); put2(x.adr); break;
+            case Operand.Elem:
+                if (x.type == Tab.charType){put(bastore);}
+                else {put(astore);}
+                break;
+        }
     }
 
     //------------- jumps ---------------
