@@ -345,14 +345,43 @@ public class Parser {
 
 
     // ActPars = "(" [ Expr {"," Expr} ] ")".
-    private static void ActPars(){
+    private static void ActPars(Operand m){
+        Operand ap;
         check(lpar);
+        if (m.kind != Operand.Meth) {
+            error("Not a method.");
+            m.obj = Tab.noObj;
+        }
+        int aPars = 0;
+        int fPars = m.obj.nPars;
+        Obj fp = m.obj.locals;
         if (sym == minus || FactorSet.get(sym)) {
-            Expr();
+            ap = Expr();
+            Code.load(ap);
+            aPars++;
+            if (fp != null){
+                if (!ap.type.assignableTo(fp.type)) {
+                    error("Parameter type mismatch.");
+                    fp = fp.next;
+                }
+            }
             while (sym == comma) {
                 scan();
-                Expr();
+                ap = Expr();
+                Code.load(ap);
+                aPars++;
+                if (fp != null){
+                    if (!ap.type.assignableTo(fp.type)) {
+                        error("Parameter type mismatch.");
+                        fp = fp.next;
+                    }
+                }
             }
+        }
+        if (aPars > fPars){
+            error("Too many actual parameters.");
+        } else if (aPars < fPars) {
+            error("Too few actual parameters.");
         }
         check(rpar);
     }
