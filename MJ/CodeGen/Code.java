@@ -123,7 +123,7 @@ public class Code {
 
     // Unconditional jump
     public static void putJump(int adr) {
-        TODO  // fill in the code
+        put(jmp); put2(adr);
     }
 
     // Conditional jump if op is false
