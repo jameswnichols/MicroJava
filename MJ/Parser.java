@@ -552,41 +552,78 @@ public class Parser {
     }
 
     //
-    private static void Factor(){
+    private static Operand Factor(){
+        Operand x;
         if (FactorSet.get(sym)){
             if (sym == ident){
-                Designator();
+                x = Designator();
                 if (sym == lpar){
-                    ActPars();
+                    ActPars(x);
+                    if (x.type == Tab.noType){
+                        error("Procedural Called As Function");
+                    }
+                    if (x.obj == Tab.ordObj || x.obj == Tab.chrObj){}
+                    else if (x.obj == Tab.lenObj){
+                        Code.put(Code.arraylength);
+                    }
+                    else{
+                        Code.put(Code.call);
+                        Code.put2(x.adr);
+                    }
+                    x.kind = Operand.Stack;
                 }
             }
             else if (sym == number){
                 scan();
+                x = new Operand(t.numVal);
             }
             else if (sym == charCon){
                 scan();
+                x = new Operand(t.numVal);
+                x.type = Tab.charType;
             }
             else if (sym == new_){
                 scan();
                 check(ident);
                 Obj obj = Tab.find(t.val);
+                Struct type = obj.type;
                 if (obj.kind != Obj.Type){
-                    error("Type Expected.");
+                    error("Type Expected");
                 }
                 if (sym == lbrack){
                     scan();
-                    Expr();
+                    x = Expr();
                     check(rbrack);
+                    if (x.type != Tab.intType){
+                        error("Array Size Must Be Of Type Int");
+                    }
+                    Code.load(x);
+                    Code.put(Code.newarray);
+                    if (type == Tab.charType){
+                        Code.put(0);
+                    }
+                    else{
+                        Code.put(1);
+                    }
+                    type = new Struct(Struct.Arr, type);
                 }
+                if (obj.kind != Obj.Type || type.kind != Struct.Class){
+                    error("Class Type Expected");
+                }
+                Code.put(Code.new_);
+                Code.put2(type.nFields);
+                x = new Operand(Operand.Stack, 0, type);
             }
             else if (sym == lpar){
                 scan();
-                Expr();
+                x = Expr();
                 check(rpar);
             }
+
         } else {
-            error("Invalid Expression.");
+            error("Invalid Expression");
         }
+        return x;
     }
 
     // Designator = ident {"." ident | "[" Expr "]"}.
