@@ -297,12 +297,19 @@ public class Parser {
 
             check(lpar);
             int op = Condition();
+            Code.putFalseJump(op, 0);
+            int adr = Code.pc-2;
             check(rpar);
             Statement();
             if (sym == else_) {
                 scan();
+                Code.putJump(0);
+                int adr2 = Code.pc -2;
+                Code.fixup(adr);
                 Statement();
+                Code.fixup(adr2);
             }
+            Code.fixup(adr);
         }
         else if (sym == while_) {
             int op;
