@@ -459,7 +459,7 @@ public class Parser {
 
                 y = Expr(); // comment out until Expr is done.
                 Code.load(x);
-                if (obj.type.kind == Struct.Arr) {
+                if (obj_arr.type.kind == Struct.Arr) {
                     if (y.type != Tab.intType) { error("Index Must be of Type Int");}
                     Code.load(y);
                     x.kind = Operand.Elem;
