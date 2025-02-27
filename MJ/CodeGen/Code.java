@@ -111,9 +111,29 @@ public class Code {
 
     // Load the operand x to the expression stack
     public static void load(Operand x) {
-        TODO  // fill in the code
+        switch (x.kind) {
+            case Operand.Con:
+                if (0 <= x.val && x.val <=5) {put(const0 + x.val);}
+                else if (x.val == -1) {put(const_m1);}
+                else {put(const_); put4(x.val);}
+                break;
+            case Operand.Static:
+                put(getstatic); put2(x.adr); break;
+            case Operand.Local:
+                if (0 <= x.adr && x.adr <= 3) {put(load0 + x.adr);}
+                else {put(load); put(x.adr);}
+                break;
+            case Operand.Fld:
+                put(getfield); put2(x.adr); break;
+            case Operand.Elem:
+                if (x.type == Tab.charType) {put(baload);}
+                else {put(aload);}
+                break;
+            case Operand.Stack: {break;}
+            case Operand.Meth: {Parser.error("Cannot Load a Method.");}
+        }
+        x.kind = Operand.Stack;
     }
-
     // Generate an assignment x = y; y has already been loaded
     public static void assignTo(Operand x) {
         TODO  // fill in the code
