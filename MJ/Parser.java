@@ -359,9 +359,19 @@ public class Parser {
 
     // Condition = Expr Relop Expr.
     private static void Condition(){
-        Expr();
-        Relop();
-        Expr();
+        int op; Operand x, y;
+
+        x = Expr();
+
+        Code.load(x);
+
+        op = Relop();
+
+        y = Expr();
+
+        Code.load(y);
+        if (!x.type.compatibleWith(y.type)) {error("Type Mismatch");}
+        if (!x.type.isRefType() && op != Code.eq && op != Code.ne) { error("Invalid Compare");}
     }
 
     // Relop = "==" | "!=" | ">" | ">=" | "<" | "<=".
