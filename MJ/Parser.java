@@ -680,6 +680,7 @@ public class Parser {
         }else{
             error("Invalid + or - Operation.");
         }
+        return -1;
     }
 
     // Mulop = "*" | "/" | "%".
