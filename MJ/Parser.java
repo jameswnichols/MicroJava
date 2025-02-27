@@ -121,7 +121,6 @@ public class Parser {
             MethodDecl();
         }
         check(rbrace);
-        Tab.dumpScope(Tab.curScope.locals);
         Code.dataSize = Tab.curScope.nVars;
         Tab.closeScope();
 
@@ -524,7 +523,7 @@ public class Parser {
                 return 5;
             default:
                 error("Invalid Comparison");
-                return -1;
+                return 0;
         }
     }
 
