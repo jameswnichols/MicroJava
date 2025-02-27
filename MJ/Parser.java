@@ -201,30 +201,57 @@ public class Parser {
 
     // MethodDecl = (Type | "void") ident "(" [FormPars] ")" {VarDecl} Block.
     private static void MethodDecl(){
-        Struct s = Tab.noType;
+
+        Struct type = Tab.noType;
+        String name;
+        int n;
+
+
         if (sym == ident) {
-            s = Type();
+            type = Type();
         } else if (sym == void_) {
             scan();
+
         } else {
             error("Invalid Method Declaration.");
         }
+        if (type.isRefType()) {error("Methods may Only Return Type Int or Char");}
+
+
         check(ident);
-
-        curMethod = Tab.insert(Obj.Meth, t.val, s);
-
+        name = t.val;
+        curMethod = Tab.insert(Obj.Meth, name, type);
         Tab.openScope();
+
         check(lpar);
+        
         if (sym == ident) {
-            FormPars();
+            n = FormPars();
+            curMethod.nPars = n;
+            if (name.equals("main")) {
+                Code.mainPc = Code.pc;
+                if (curMethod.type != Tab.noType) {error("Method Main Must be Void");}
+                if (curMethod.nPars != 0) {error("Main Must not Have Parameters");}
+            }
         }
         curMethod.nPars = Tab.curScope.nVars;
         check(rpar);
         while (sym == ident) {
             VarDecl();
         }
+        curMethod.adr = Code.pc;
+        Code.put(Code.enter);
+        Code.put(curMethod.nPars);
+        Code.put(Tab.curScope.nVars);
         curMethod.locals = Tab.curScope.locals;
         Block();
+        if (curMethod.type == Tab.noType) {
+            Code.put(Code.exit);
+            Code.put(Code.return_);
+        } else {
+            Code.put(Code.trap);
+            Code.put(1);
+        }
         Tab.closeScope();
     }
 
