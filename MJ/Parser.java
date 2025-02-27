@@ -458,17 +458,20 @@ public class Parser {
 
     // Condition = Expr Relop Expr.
     private static int Condition(){
-        int op; Operand x, y;
+        int op;
+        Operand x, y;
 
         x = Expr();
 
         Code.load(x);
 
         op = Relop();
+
         y = Expr();
         Code.load(y);
+
         if (!x.type.compatibleWith(y.type)) {error("Type Mismatch");}
-        if (!x.type.isRefType() && op != Code.eq && op != Code.ne) { error("Invalid Compare");}
+        if (x.type.isRefType() && op != Code.eq && op != Code.ne) { error("Invalid Compare");}
         return op;
     }
 
