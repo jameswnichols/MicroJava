@@ -510,13 +510,24 @@ public class Parser {
     private static Operand Expr(){
         Operand x, y;
         int op;
+        boolean Minus = false;
 
         if (sym == minus){
             scan();
+            Minus = true;
         }
         x = Term();
-        if (x.type != Tab.intType){
-            error("Operand Must be of Type Int.");
+        if (Minus) {
+            if (x.type != Tab.intType) {
+                error("Operand Must be of Type Int.");
+            }
+            if (x.kind == Operand.Con){
+                x.val = -x.val;
+            }
+            else {
+                Code.load(x);
+                Code.put(Code.neg);
+            }
         }
 
         while (sym == plus || sym == minus){
