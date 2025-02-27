@@ -437,7 +437,7 @@ public class Parser {
     }
 
     // Designator = ident {"." ident | "[" Expr "]"}.
-    private static void Designator(){
+    private static Operand Designator(){
         Operand x,y;
         Obj obj;
 
@@ -476,6 +476,7 @@ public class Parser {
                 break;
             }
         }
+        return x;
     }
 
     // Addop = "+" | "-".
