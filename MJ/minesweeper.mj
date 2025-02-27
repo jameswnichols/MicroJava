@@ -1,0 +1,25 @@
+program MJSweeper
+
+    class Cell{
+        int X;
+        int Y;
+
+        int MinesNearby;
+        int HasMine;
+    }
+
+	class Grid {
+	    int Width;
+	    int Height;
+
+        Cell[] Cells;
+    	}
+    {
+
+	void main()
+	    Grid grid;
+	{ //---------- Initialize val
+
+		//i = val.i;
+	}
+}

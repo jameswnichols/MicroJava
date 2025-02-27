@@ -379,7 +379,7 @@ public class Parser {
         }
         else if (sym == return_) {
             scan();
-            if (sym == minus || sym == ident) {
+            if (FactorSet.get(sym) || sym == minus) {
                 x= Expr();
                 Code.load(x);
                 if (curMethod.type == Tab.noType){
@@ -389,8 +389,10 @@ public class Parser {
                     error("Type Of Return Value Must Match Method Type");
                 }
             }
-            if (curMethod.type != Tab.noType){
-                error("Return Value Expected");
+            else{
+                if (curMethod.type != Tab.noType){
+                    error("Return Value Expected");
+                }
             }
             Code.put(Code.exit);
             Code.put(Code.return_);

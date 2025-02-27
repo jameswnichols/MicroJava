@@ -2,15 +2,12 @@ program P
 	class Table {
 	    int i;
     	}
-    Table val;
 {
-	void main()
-	    int i;
-	{ //---------- Initialize val
-	    val  = new Table;
-		read(val.i);
 
-		print(val.i);
+	void main()
+	    Table[] array;
+	{ //---------- Initialize val
+	    array = new Table[10];
 
 		//i = val.i;
 	}
