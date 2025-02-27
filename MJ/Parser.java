@@ -3,7 +3,6 @@
 */
 package MJ;
 
-import MJ.CodeGen.Operand;
 import MJ.SymTab.Tab;
 
 import java.util.*;
@@ -372,7 +371,10 @@ public class Parser {
     }
 
     // Expr = ["-"] Term {Addop Term}.
-    private static void Expr(){
+    private static Operand Expr(){
+        Operand x, y;
+        int op;
+
         if (sym == minus){
             scan();
         }
@@ -381,10 +383,14 @@ public class Parser {
             Addop();
             Term();
         }
+        return x;
     }
 
     // Term = Factor {Mulop Factor}.
     private static void Term(){
+        Operand x, y;
+        int op;
+
         Factor();
         while (sym == times || sym == slash || sym == rem){
             Mulop();
