@@ -1,1 +1,18 @@
-final int Test = 10;
+program P
+	class Table {
+	    int i;
+    	}
+    Table val;
+{
+	void main()
+	    int i;
+	{ //---------- Initialize val
+		read(i);
+		if (i = 1){
+		    print('a');
+		} else{
+		    print('c');
+		}
+		//i = val.i;
+	}
+}

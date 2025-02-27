@@ -122,6 +122,7 @@ public class Parser {
         }
         check(rbrace);
         Tab.dumpScope(Tab.curScope.locals);
+        Code.dataSize = Tab.curScope.nVars;
         Tab.closeScope();
 
     }
@@ -341,23 +342,28 @@ public class Parser {
             check(semicolon);
         }
         else if (sym == if_) {
+            int op;
             scan();
 
             check(lpar);
-            int op = Condition();
-            Code.putFalseJump(op, 0);
-            int adr = Code.pc-2;
+            op = Condition();
             check(rpar);
+
+            Code.putFalseJump(op, 0);
+            int adr = Code.pc - 2;
+
             Statement();
+
             if (sym == else_) {
                 scan();
                 Code.putJump(0);
-                int adr2 = Code.pc -2;
+                int adr2 = Code.pc - 2;
                 Code.fixup(adr);
                 Statement();
                 Code.fixup(adr2);
+            }else{
+                Code.fixup(adr);
             }
-            Code.fixup(adr);
         }
         else if (sym == while_) {
             int op;
@@ -392,21 +398,30 @@ public class Parser {
             check(semicolon);
         }
         else if (sym == read_) {
+            Operand op;
             scan();
             check(lpar);
-            Designator();
+            op = Designator();
             check(rpar);
+            Code.put(Code.read);
+            Code.assignTo(op);
             check(semicolon);
         }
         else if (sym == print_) {
+            Operand op;
+            int width = 1;
             scan();
             check(lpar);
-            Expr();
+            op = Expr();
             if (sym == comma) {
                 scan();
                 check(number);
+                width = t.numVal;
             }
             check(rpar);
+            Code.load(op);
+            Code.load(new Operand(width));
+            Code.put(Code.print);
             check(semicolon);
         }
         else if (sym == lbrace) {
