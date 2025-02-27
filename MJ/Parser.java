@@ -411,6 +411,7 @@ public class Parser {
         else if (sym == print_) {
             Operand op;
             int width = 1;
+            int character = 0;
             scan();
             check(lpar);
             op = Expr();
@@ -419,9 +420,11 @@ public class Parser {
                 check(number);
                 width = t.numVal;
             }
+            if (op.type == Tab.charType) { character = 1; }
             check(rpar);
             Code.load(op);
             Code.load(new Operand(width));
+            Code.load(new Operand(character));
             Code.put(Code.print);
             check(semicolon);
         }
