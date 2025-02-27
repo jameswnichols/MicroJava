@@ -305,11 +305,17 @@ public class Parser {
             }
         }
         else if (sym == while_) {
+            int op;
             scan();
+            int top = Code.pc;
             check(lpar);
-            Condition();
+            op = Condition();
             check(rpar);
+            Code.putFalseJump(op, 0);
+            int adr = Code.pc - 2;
             Statement();
+            Code.putJump(top);
+            Code.fixup(adr);
         }
         else if (sym == return_) {
             scan();
