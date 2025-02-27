@@ -457,7 +457,7 @@ public class Parser {
 
                 Obj obj_arr = Tab.find(name);
 
-                //y = Expr(); // comment out until Expr is done.
+                y = Expr(); // comment out until Expr is done.
                 Code.load(x);
                 if (obj.type.kind == Struct.Arr) {
                     if (y.type != Tab.intType) { error("Index Must be of Type Int");}
