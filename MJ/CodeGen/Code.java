@@ -65,7 +65,8 @@ public class Code {
             print       = 51,
             bread       = 52,
             bprint      = 53,
-            trap		    = 54;
+            trap		    = 54,
+            rand        = 55;
     public static final int  // compare operators
             eq = 0,
             ne = 1,

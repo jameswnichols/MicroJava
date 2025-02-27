@@ -600,6 +600,9 @@ public class Parser {
                 else if (x.obj == Tab.lenObj){
                     Code.put(Code.arraylength);
                 }
+                else if (x.obj == Tab.randObj){
+                    Code.put(Code.rand);
+                }
                 else{
                     Code.put(Code.call);
                     Code.put2(x.adr);

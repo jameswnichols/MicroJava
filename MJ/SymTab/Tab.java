@@ -19,6 +19,7 @@ public class Tab {
     public static Obj ordObj;
     public static Obj lenObj;
     public static Obj noObj;
+    public static Obj randObj;
 
     private static void error(String msg) {
         Parser.error(msg);
@@ -149,6 +150,13 @@ public class Tab {
         lenObj = insert(Obj.Meth, "len", intType);
         lenObj.locals = new Obj(Obj.Var, "a", new Struct(Struct.Arr, noType));
         lenObj.nPars = 1;
+        randObj = insert(Obj.Meth, "rand", intType);
+        Obj paramOne = new Obj(Obj.Var, "min", intType);
+        paramOne.next = new Obj(Obj.Var, "max", intType);
+        randObj.locals = paramOne;
+        randObj.nPars = 2;
+
+
     }
 }
 

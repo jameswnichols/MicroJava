@@ -6,8 +6,13 @@ program P
 
 	void main()
 	    Table[] array;
+	    int Test;
 	{ //---------- Initialize val
 	    array = new Table[10];
+
+	    Test = rand(0, 10);
+
+	    print(Test);
 
 		//i = val.i;
 	}

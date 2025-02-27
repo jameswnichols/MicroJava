@@ -5,6 +5,7 @@
 package MJ;
 
 import java.io.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Run {
     static byte code[];			// code array
@@ -79,7 +80,8 @@ public class Run {
             print       = 51,
             bread       = 52,
             bprint      = 53,
-            trap		    = 54;
+            trap		    = 54,
+            rand        = 55;
 
     static final int  // compare operators
             eq = 0,
@@ -100,7 +102,8 @@ public class Run {
             "baload  ", "bastore ", "arraylen", "pop     ", "jmp     ",
             "jeq     ", "jne     ", "jlt     ", "jle     ", "jgt     ",
             "jge     ", "call    ", "return  ", "enter   ", "exit    ",
-            "read    ", "print   ", "bread   ", "bprint  ", "trap    "
+            "read    ", "print   ", "bread   ", "bprint  ", "trap    ",
+            "rand    "
     };
 
     //----- expression stack
@@ -199,6 +202,10 @@ public class Run {
         int len = s.length();
         while (len < n) {System.out.print(" "); len++;}
         System.out.print(s);
+    }
+
+    static int rand(int rmin, int rmax){
+        return ThreadLocalRandom.current().nextInt(rmin, rmax + 1);
     }
 
     static void printInstr() {
@@ -421,6 +428,13 @@ public class Run {
                         for (i = 0; i < len; i++) System.out.print(' ');
                         for (i = 0; i < s.length(); i++) System.out.print(s.charAt(i));
                         break;
+                    case rand:
+                        int min, max;
+                        max = pop();
+                        min = pop();
+                        push(rand(min, max));
+                        break;
+
                     case bread:
                         try {
                             push(System.in.read());
