@@ -419,7 +419,7 @@ public class Parser {
         Operand ap;
         check(lpar);
         if (m.kind != Operand.Meth) {
-            error("Not a method.");
+            error("Not a Method.");
             m.obj = Tab.noObj;
         }
         int aPars = 0;
@@ -431,7 +431,7 @@ public class Parser {
             aPars++;
             if (fp != null){
                 if (!ap.type.assignableTo(fp.type)) {
-                    error("Parameter type mismatch.");
+                    error("Parameter Type Mismatch.");
                     fp = fp.next;
                 }
             }
@@ -442,16 +442,16 @@ public class Parser {
                 aPars++;
                 if (fp != null){
                     if (!ap.type.assignableTo(fp.type)) {
-                        error("Parameter type mismatch.");
+                        error("Parameter Type Mismatch.");
                         fp = fp.next;
                     }
                 }
             }
         }
         if (aPars > fPars){
-            error("Too many actual parameters.");
+            error("Too Many Actual Parameters.");
         } else if (aPars < fPars) {
-            error("Too few actual parameters.");
+            error("Too Few Actual Parameters.");
         }
         check(rpar);
     }
@@ -516,7 +516,7 @@ public class Parser {
         }
         x = Term();
         if (x.type != Tab.intType){
-            error("Operand must be of type int.");
+            error("Operand Must be of Type Int.");
         }
 
         while (sym == plus || sym == minus){
@@ -525,7 +525,7 @@ public class Parser {
             y = Term();
             Code.load(y);
             if (x.type != Tab.intType || y.type != Tab.intType) {
-                error("Operands must be of type int.");
+                error("Operands Must be of Type Int.");
             }
             Code.put(op);
         }
