@@ -204,7 +204,7 @@ public class Parser {
 
         Struct type = Tab.noType;
         String name;
-        int n;
+        int n = 0;
 
 
         if (sym == ident) {
@@ -227,23 +227,27 @@ public class Parser {
         
         if (sym == ident) {
             n = FormPars();
-            curMethod.nPars = n;
-            if (name.equals("main")) {
-                Code.mainPc = Code.pc;
-                if (curMethod.type != Tab.noType) {error("Method Main Must be Void");}
-                if (curMethod.nPars != 0) {error("Main Must not Have Parameters");}
-            }
         }
-        curMethod.nPars = Tab.curScope.nVars;
+
         check(rpar);
+        curMethod.nPars = n;
+
+        if (name.equals("main")) {
+            Code.mainPc = Code.pc;
+            if (curMethod.type != Tab.noType) {error("Method Main Must be Void");}
+            if (curMethod.nPars != 0) {error("Main Must not Have Parameters");}
+        }
+
         while (sym == ident) {
             VarDecl();
         }
+
+        curMethod.locals = Tab.curScope.locals;
         curMethod.adr = Code.pc;
         Code.put(Code.enter);
         Code.put(curMethod.nPars);
         Code.put(Tab.curScope.nVars);
-        curMethod.locals = Tab.curScope.locals;
+
         Block();
         if (curMethod.type == Tab.noType) {
             Code.put(Code.exit);
