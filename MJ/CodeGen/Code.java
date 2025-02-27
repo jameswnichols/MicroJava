@@ -149,6 +149,7 @@ public class Code {
                 if (x.type == Tab.charType){put(bastore);}
                 else {put(astore);}
                 break;
+            default: Parser.error("Can not assign.");
         }
     }
 

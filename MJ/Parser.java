@@ -554,75 +554,80 @@ public class Parser {
     //
     private static Operand Factor(){
         Operand x;
-        if (FactorSet.get(sym)){
-            if (sym == ident){
-                x = Designator();
-                if (sym == lpar){
-                    ActPars(x);
-                    if (x.type == Tab.noType){
-                        error("Procedural Called As Function");
-                    }
-                    if (x.obj == Tab.ordObj || x.obj == Tab.chrObj){}
-                    else if (x.obj == Tab.lenObj){
-                        Code.put(Code.arraylength);
-                    }
-                    else{
-                        Code.put(Code.call);
-                        Code.put2(x.adr);
-                    }
-                    x.kind = Operand.Stack;
+
+        if (sym == ident){
+            x = Designator();
+            if (sym == lpar){
+                ActPars(x);
+                if (x.type == Tab.noType){
+                    error("Procedural Called As Function");
                 }
+                if (x.obj == Tab.ordObj || x.obj == Tab.chrObj){}
+                else if (x.obj == Tab.lenObj){
+                    Code.put(Code.arraylength);
+                }
+                else{
+                    Code.put(Code.call);
+                    Code.put2(x.adr);
+                }
+                x.kind = Operand.Stack;
             }
-            else if (sym == number){
+        }
+        else if (sym == number){
+            scan();
+            x = new Operand(t.numVal);
+        }
+        else if (sym == charCon){
+            scan();
+            x = new Operand(t.numVal);
+            x.type = Tab.charType;
+        }
+        else if (sym == new_){
+            scan();
+            check(ident);
+            Obj obj = Tab.find(t.val);
+            Struct type = obj.type;
+
+            if (sym == lbrack){
                 scan();
-                x = new Operand(t.numVal);
-            }
-            else if (sym == charCon){
-                scan();
-                x = new Operand(t.numVal);
-                x.type = Tab.charType;
-            }
-            else if (sym == new_){
-                scan();
-                check(ident);
-                Obj obj = Tab.find(t.val);
-                Struct type = obj.type;
                 if (obj.kind != Obj.Type){
                     error("Type Expected");
                 }
-                if (sym == lbrack){
-                    scan();
-                    x = Expr();
-                    check(rbrack);
-                    if (x.type != Tab.intType){
-                        error("Array Size Must Be Of Type Int");
-                    }
-                    Code.load(x);
-                    Code.put(Code.newarray);
-                    if (type == Tab.charType){
-                        Code.put(0);
-                    }
-                    else{
-                        Code.put(1);
-                    }
-                    type = new Struct(Struct.Arr, type);
+                x = Expr();
+                check(rbrack);
+                if (x.type != Tab.intType){
+                    error("Array Size Must Be Of Type Int");
                 }
-                if (obj.kind != Obj.Type || type.kind != Struct.Class){
+                Code.load(x);
+                Code.put(Code.newarray);
+                if (type == Tab.charType){
+                    Code.put(0);
+                }
+                else{
+                    Code.put(1);
+                }
+                type = new Struct(Struct.Arr, type);
+            }
+            else {
+                if (obj.kind != Obj.Type || type.kind != Struct.Class) {
                     error("Class Type Expected");
                 }
                 Code.put(Code.new_);
                 Code.put2(type.nFields);
-                x = new Operand(Operand.Stack, 0, type);
             }
-            else if (sym == lpar){
-                scan();
-                x = Expr();
-                check(rpar);
-            }
-
-        } else {
-            error("Invalid Expression");
+            x = new Operand(Operand.Stack, 0, type);
         }
+        else if (sym == lpar){
+            scan();
+            x = Expr();
+            check(rpar);
+        }
+        else {
+            error("Invalid Factor.");
+            x = new Operand(Operand.Stack);
+        }
+
+
         return x;
     }
 
