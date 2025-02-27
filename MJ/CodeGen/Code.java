@@ -128,12 +128,13 @@ public class Code {
 
     // Conditional jump if op is false
     public static void putFalseJump(int op, int adr) {
-        TODO  // fill in the code
+        put(jeq + inverse[op]);
+        put2(adr);
     }
 
     // patch jump target at adr so that it jumps to the current pc
     public static void fixup(int adr) {
-        TODO  // fill in the code
+        put2(adr, pc);
     }
 
     //------------------------------------
