@@ -343,7 +343,8 @@ program MJSweeper
     }
 
 	void main()
-	    int UserInput, Running, HitMine;
+	    int Running, HitMine;
+	    char UserInput;
 	{ //---------- Initialize val
 	    CellAtPosition = null;
 	    HitMine = 0;
@@ -364,21 +365,22 @@ program MJSweeper
             print('>');
             print(' ');
 
-            read(UserInput);
+            //read(UserInput);
+            readc(UserInput);
 
-            if (UserInput == 1){
+            if (UserInput == 'l'){
                 MoveCursorLeft();
             }
-            else if (UserInput == 2){
+            else if (UserInput == 'r'){
                 MoveCursorRight();
             }
-            else if (UserInput == 3){
+            else if (UserInput == 'd'){
                 MoveCursorDown();
             }
-            else if (UserInput == 4){
+            else if (UserInput == 'u'){
                 MoveCursorUp();
             }
-            else if (UserInput == 5){
+            else if (UserInput == 'o'){
                 GetCellAtPosition(grid.CursorX, grid.CursorY);
                 if (CellAtPosition != null){
                     if (CellAtPosition.Flagged == 0){
@@ -386,7 +388,7 @@ program MJSweeper
                     }
                 }
             }
-            else if (UserInput == 6){
+            else if (UserInput == 'f'){
                 Flag();
             }
 

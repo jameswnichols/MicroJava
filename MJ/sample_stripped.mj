@@ -6,12 +6,13 @@ program P
 
 	void main()
 	    Table[] array;
-	    int Test;
+	    char Test;
 	{ //---------- Initialize val
 	    array = new Table[10];
 
-	    Test = rand(0, 10);
+	    readc(Test);
 
+        print('>');
 	    print(Test);
 
 		//i = val.i;

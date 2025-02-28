@@ -47,12 +47,13 @@ public class Parser {
             return_   = 33,
             void_     = 34,
             while_    = 35,
-            eof       = 36;
+            eof       = 36,
+            readc     = 37;
     private static final String[] name = { // token names for error messages
             "none", "identifier", "number", "char constant", "+", "-", "*", "/", "%",
             "==", "!=", "<", "<=", ">", ">=", "=", ";", ",", ".", "(", ")",
             "[", "]", "{", "}", "class", "else", "final", "if", "new", "print",
-            "program", "read", "return", "void", "while", "eof"
+            "program", "read", "return", "void", "while", "eof", "readc"
     };
 
     private static Token t;				// current token (recently recognized)
@@ -408,6 +409,16 @@ public class Parser {
             Code.assignTo(op);
             check(semicolon);
         }
+        else if (sym == readc){
+            Operand op;
+            scan();
+            check(lpar);
+            op = Designator();
+            check(rpar);
+            Code.put(Code.readc);
+            Code.assignTo(op);
+            check(semicolon);
+        }
         else if (sym == print_) {
             Operand op;
             int width = 1;
@@ -753,6 +764,7 @@ public class Parser {
         s = new BitSet(64); firstStat = s;
         s.set(ident); s.set(if_); s.set(while_); s.set(read_);
         s.set(return_); s.set(print_); s.set(lbrace); s.set(semicolon);
+        s.set(readc);
 
         s = (BitSet)firstStat.clone(); syncStat = s;
         s.clear(ident); s.set(rbrace); s.set(eof);

@@ -81,7 +81,8 @@ public class Run {
             bread       = 52,
             bprint      = 53,
             trap		    = 54,
-            rand        = 55;
+            rand        = 55,
+            readc       = 56;
 
     static final int  // compare operators
             eq = 0,
@@ -103,7 +104,7 @@ public class Run {
             "jeq     ", "jne     ", "jlt     ", "jle     ", "jgt     ",
             "jge     ", "call    ", "return  ", "enter   ", "exit    ",
             "read    ", "print   ", "bread   ", "bprint  ", "trap    ",
-            "rand    "
+            "rand    ", "readc   "
     };
 
     //----- expression stack
@@ -192,6 +193,13 @@ public class Run {
             b = System.in.read();
         }
         if (prev == '-') val = -val;
+        return val;
+    }
+
+    static int readChar() throws IOException {
+        int val = 0;
+        val = System.in.read();
+        System.out.println("Got Character -> " + (char) val);
         return val;
     }
 
@@ -415,6 +423,14 @@ public class Run {
                     case read:
                         try {
                             val = readInt();
+                            push(val);
+                        } catch (IOException ex) {
+                            throw new VMError("end of input");
+                        }
+                        break;
+                    case readc:
+                        try {
+                            val = readChar();
                             push(val);
                         } catch (IOException ex) {
                             throw new VMError("end of input");

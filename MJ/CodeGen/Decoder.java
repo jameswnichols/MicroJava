@@ -60,7 +60,8 @@ public class Decoder {
             bread       = 52,
             bprint      = 53,
             trap		    = 54,
-            rand        = 55;
+            rand        = 55,
+            readc       = 56;
 
     private static byte[] code;		// code buffer
     private static int cur;			// address of next byte to decode
@@ -140,6 +141,7 @@ public class Decoder {
                 case enter:     P("enter "+get()+" "+get()); break;
                 case exit:      P("exit"); break;
                 case read:      P("read"); break;
+                case readc:     P("readc"); break;
                 case print:     P("print"); break;
                 case bread:     P("bread"); break;
                 case bprint:    P("bprint"); break;
