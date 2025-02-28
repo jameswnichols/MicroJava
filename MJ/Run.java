@@ -197,10 +197,7 @@ public class Run {
     }
 
     static int readChar() throws IOException {
-        int val = 0;
-        val = System.in.read();
-        System.out.println("Got Character -> " + (char) val);
-        return val;
+        return System.in.read();
     }
 
     //----- debug output
